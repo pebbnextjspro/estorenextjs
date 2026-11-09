@@ -80,6 +80,12 @@ function SingleProduct() {
             alert('Please Upload Product Image');
             return;
         }
+
+        try {
+            
+        } catch (error) {
+            
+        }
     }
 
     

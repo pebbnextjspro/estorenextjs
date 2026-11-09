@@ -71,7 +71,7 @@ function SingleProduct() {
     }
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
     
         e.preventDefault();
     
@@ -82,9 +82,40 @@ function SingleProduct() {
         }
 
         try {
+
+            const formdata = new FormData();
+
+            formdata.append('rating' , rating)
+            formdata.append('username' , username);
+            formdata.append('comments' , comments);
+            formdata.append('emailaddress' , emailaddress);
+            formdata.append('productid' , listdata.id);
+            formdata.append('productname' , listdata.ProductName);
+            formdata.append('customerimage' , userimage);
+            formdata.append('productimage' , productimage);
+
+            const res = await clientaxios.post('/api/admin/review/review-create' , formdata);
+
+            if (res.data.success) {
+
+              console.log('Review Added Succesfuly')
+            }
             
         } catch (error) {
+
+            if (error.response) {
+
+                alert(error.response.data.msg) 
+            } else {
+
+                alert('Server is not responding')
+            }
             
+        } finally {
+
+             GetData();
+             GetList();
+    
         }
     }
 
@@ -152,7 +183,7 @@ const GetData = async () => {
         setcounter(value)
     }
 
-
+console.log('listdata' , listdata.id)
 
 
 
@@ -163,6 +194,7 @@ useEffect(() => {
 
 
 },[])
+
 
 
 

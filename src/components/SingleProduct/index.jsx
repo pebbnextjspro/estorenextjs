@@ -25,13 +25,15 @@ import ProductSlider from '../ProductSlider';
 import { useTheme } from '@/app/context/ThemeContext';
 import clientaxios from '../axiosinstance';
 import ReviewForm from './ReviewForm';
+import { toast } from 'react-toastify/unstyled';
+import BlackScreen from '../BlackScreen';
 
 
 
 function SingleProduct() {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const {darkmode} = useTheme();
+    const {darkmode,loading , setloading} = useTheme();
     const [counter , setcounter] = useState(5);
     const [specspage , setspecspage] = useState(true);
     const [listdata , setlistdata] = useState({});
@@ -74,6 +76,8 @@ function SingleProduct() {
     const handleSubmit = async (e) => {
     
         e.preventDefault();
+
+        setloading(true)
     
         if (prevproimage === undefined) {
     
@@ -98,14 +102,27 @@ function SingleProduct() {
 
             if (res.data.success) {
 
-              console.log('Review Added Succesfuly')
+              toast.success(`${res.data.msg}`)
+            } else {
+
+                toast.error(res.data.msg)
             }
             
         } catch (error) {
 
             if (error.response) {
 
-                alert(error.response.data.msg) 
+                toast.error(`${error.response.data.msg}`, {
+position: "top-right",
+autoClose: 5000,
+hideProgressBar: false,
+closeOnClick: false,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "colored",
+transition: Bounce,
+}) 
             } else {
 
                 alert('Server is not responding')
@@ -115,6 +132,11 @@ function SingleProduct() {
 
              GetData();
              GetList();
+             window.scrollTo({
+                top: '800',
+                behavior: "smooth"
+             })
+             setloading(false)
     
         }
     }
@@ -123,6 +145,8 @@ function SingleProduct() {
 
 
     const GetList = async () => {
+
+        setloading(true)
 
         try {
 
@@ -143,10 +167,15 @@ function SingleProduct() {
                 alert('Server is not responding')
             }
             
+        } finally {
+
+            setloading(false)
         }
     }
  
 const GetData = async () => {
+
+    setloading(true)
 
    try {
 
@@ -173,6 +202,9 @@ const GetData = async () => {
         alert('Server is not responding')
     }
     
+   } finally {
+
+    setloading(false)
    }
 }
 
@@ -183,7 +215,6 @@ const GetData = async () => {
         setcounter(value)
     }
 
-console.log('listdata' , listdata.id)
 
 
 
@@ -203,6 +234,9 @@ useEffect(() => {
 
   return (
    <>
+   {
+    loading && <BlackScreen/>
+   }
     {darkmode ? <div className='bg-[#171717] h-18'>
       
     </div> : 
@@ -365,7 +399,7 @@ flex flex-col gap-2'>
     <Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImage}`} alt='HeadPhone' width={200} height={200} className='m-auto'/>
 </div>
 <div>
-    <span className='text-[18px] font-bold font-serif'>{listdata.ProductName}</span>
+    <h6>{listdata.ProductName}</h6>
     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse consequatur repellat eaque, 
         repellendus obcaecati fugit quas aperiam aliquid officiis inventore reiciendis saepe rem 
         corrupti magnam vel, iste, quidem veritatis dolor?</p>

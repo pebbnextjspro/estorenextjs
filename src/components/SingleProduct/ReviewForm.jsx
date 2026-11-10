@@ -3,6 +3,8 @@ import Rating from '@mui/material/Rating';
 import user from '../../../nextjs/client.png'
 import { Button } from '@mui/material';
 import Image from 'next/image';
+import { MdRateReview } from "react-icons/md";
+
 
 
 
@@ -14,7 +16,10 @@ function ReviewForm({imagearray , values}) {
    <>
    <div className='w-full h-auto p-4 bg-white border border-[rgba(0,0,0,0.2)] shadow-[rgba(0,0,0,0.3)] rounded
 flex flex-column items-center justify-center mt-2'>
-<h4>Write a Review</h4>
+<Button className='!flex !items-center !justify-between w-[200px] h-[50px] !bg-[#02B290] !text-white !p-2 mb-2'>
+    <span className='capitalize font-semibold text-[18px]'>Write a Review</span>
+    <MdRateReview className='!text-[20px]' />
+</Button>
 <form onSubmit={values.handleSubmit}
  action="" className='flex flex-column justify-center items-center gap-4 w-full'>
     <label htmlFor="">Rating</label>
@@ -67,7 +72,7 @@ flex flex-column items-center justify-center mt-2'>
 
 
      <label htmlFor="" className='font-semibold'>Email Address</label>
-    <input type="email" className='form-control text-center' 
+    <input type="email" className='form-control text-center' required
     placeholder='Enter Your Email Address (Email will not show on Public)'
     value={values.emailaddress} onChange={(e) => values.setemailaddress(e.target.value)} />
      <Button className='w-40 h-10 bg-black relative flex items-center justify-center rounded-2xl text-white' type='submit'>

@@ -8,6 +8,7 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [darkmode, setdarkmode] = useState(false);
     const [dropdownactive , setdropdownactive] = useState(false);
+    const [loading , setloading] = useState(false)
 
     // const [prodata , setprodata] = useState([]);
 
@@ -46,7 +47,7 @@ export function ThemeProvider({ children }) {
   
 
   return (
-    <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive }}>
+    <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading }}>
       {children}
     </ThemeContext.Provider>
   );

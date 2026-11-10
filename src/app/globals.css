@@ -169,10 +169,10 @@ margin-top: 30px !important;
 
 h6{
 
- font-size: 25px !important;
-    font-weight: 600;
-    text-transform: capitalize;
-    font-family: math;
+ font-size: 22px !important;
+    font-weight: 300;
+    font-family: system-ui;
+    letter-spacing: 4px;
 }
 
 h2{
@@ -824,7 +824,25 @@ background-color: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 } */
 
-
+.blackscreencontainer .css-1wnsr1i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 100%;
+    background-color: transparent;
+    /* border: 2px solid #000; */
+    /* box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12); */
+    /* padding: 32px; */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
 
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */

@@ -7,6 +7,10 @@ import { ThemeProvider } from "./context/ThemeContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BootstrapClient from "@/components/BootstrapClient";
 import BlackPage from "@/components/BlackPage";
+import ToastProvider from "@/components/ToastProvider";
+import "react-toastify/ReactToastify.css";
+import BlackScreen from "@/components/BlackScreen";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +45,8 @@ export default function RootLayout({ children }) {
         {children}
         <Footer/>
        
-         
+         <ToastProvider/>
+       
        </ThemeProvider>
         </body>
       

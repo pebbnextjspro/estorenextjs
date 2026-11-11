@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../../public/logo.png'
 import Link from 'next/link'
 import Search from './Search'
@@ -26,6 +26,7 @@ import head7 from '../../nextjs/hero/7.png'
 import head8 from '../../nextjs/hero/8.png'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import clientaxios from './axiosinstance';
 
 const style = {
   position: 'absolute',
@@ -57,6 +58,42 @@ export default function Header() {
       const [open, setOpen] = useState(false);
       const handleOpen = () => setOpen(true);
       const handleClose = () => setOpen(false);
+      const [listdata , setlistdata] = useState([]);
+
+      const GetData = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/products/product-list`);
+      
+          if (res.data.success) {
+      
+              setlistdata(res.data.Data);
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
+
+      useEffect(() => {
+      
+          GetData();
+         
+      
+      },[])
+
+      console.log('listdataheader' , listdata)
 
 
   return (
@@ -286,183 +323,29 @@ export default function Header() {
 <ul className='p-0'>
 
 
-  <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
+ {
+  listdata?.length !== 0 && listdata?.map((data) => (
+     <li key={data.id} className='flex items-start justify-between py-2 cursor-pointer' 
+     style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
   onClick={() => setdropdownactive(false)}>
    <div className='flex gap-2'>
     <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head1} alt="headphone" width={100} height={100} className='object-contain' />
+<Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImages1}`} alt="headphone" width={100} height={100} className='object-contain' />
    </div>
    <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
+    <span className='text-[18px] font-semibold'>{data.ProductName}</span>
+    <span className='line-clamp-2 w-[200px]'>{data.ProductImages2}</span>
    </div>
    </div>
 
    <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
+    <span className='text-[20px] text-red-500 font-semibold'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
+    <span className='text-[18px] text-black font-semibold line-through'>{'Rs.'+Number(data.ProductOldPrice).toLocaleString("en-pk")}</span>
    </div>
    
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head2} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Head Phone</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head3} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head4} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head5} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head6} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src={head7} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src="/headphone.png" alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
-   <li className='flex items-start justify-between py-2 cursor-pointer' style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
-   <div className='flex gap-2'>
-    <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
-<Image src="/headphone.png" alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-   <div>
-    <span className='text-[18px] font-semibold'>Product Name</span>
-    <span className='line-clamp-2 w-[200px]'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas dolorum dolores minima laborum expedita dolor itaque. 
-      Ipsa accusantium debitis cupiditate sequi. A dolorem dolore quibusdam hic! Quis hic necessitatibus doloribus.</span>
-   </div>
-   </div>
-
-   <div className='flex flex-col'>
-    <span className='text-[20px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[18px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-   
-  </li>
+  </li>  
+  ))
+ }
  
 </ul>
         </div>

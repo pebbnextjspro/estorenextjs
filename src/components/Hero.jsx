@@ -53,10 +53,11 @@ export default function Hero() {
        }
     }
 
-    const handleSubmit = (id,ProductImages4) => {
+    const handleSubmit = (id,ProductImages4,ProductCategory) => {
 
         localStorage.setItem("productid" , id);
         localStorage.setItem("ProductImages4" , ProductImages4);
+        localStorage.setItem("ProductCategory" , ProductCategory);
 
        router.push('/product')
 
@@ -102,7 +103,7 @@ export default function Hero() {
 {darkmode ? <h6 className='text-white'>{data.Heading1}</h6> : <h6>{data.Heading1}</h6>}
 {darkmode ? <h2 className='text-white'>{data.ShortDesc}</h2> :
     <h2>{data.ShortDesc}</h2>}
-    <Button onClick={() => handleSubmit(data.id,data.ProductImages4)}>
+    <Button onClick={() => handleSubmit(data.id,data.ProductImages4,data.ProductCategory)}>
         Buy Now
     </Button>
      <Button className='detailsbtn'>

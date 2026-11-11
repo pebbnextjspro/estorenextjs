@@ -51,6 +51,36 @@ function SingleProduct() {
 
     const [userimage , setuserimage] = useState();
     const [prevuserimage , setprevuserimage] = useState();
+    const [colorcategory , setcolorcategory] = useState([]);
+
+     const GetColors = async () => {
+
+        setloading(true)
+
+        try {
+
+    const res = await clientaxios.get(`/api/admin/products/product-getcolorcat/${localStorage.getItem('ProductCategory')}`);
+
+            if (res.data.success) {
+
+                setcolorcategory(res.data.Data);
+            }
+            
+        } catch (error) {
+
+            if (error.response) {
+
+                alert(error.response.data.msg)
+            } else {
+
+                alert('Server is not responding')
+            }
+            
+        } finally {
+
+            setloading(false)
+        }
+    }
 
     const handleProductImage = (e) => {
     
@@ -175,8 +205,6 @@ transition: Bounce,
  
 const GetData = async () => {
 
-    setloading(true)
-
    try {
 
      const res = await clientaxios.get(`/api/admin/products/product-listbyid/${localStorage.getItem('productid')}`);
@@ -202,9 +230,6 @@ const GetData = async () => {
         alert('Server is not responding')
     }
     
-   } finally {
-
-    setloading(false)
    }
 }
 
@@ -215,6 +240,15 @@ const GetData = async () => {
         setcounter(value)
     }
 
+console.log('listdata' , listdata.id)
+
+const handleColorCategory = (id) => {
+
+    localStorage.setItem('productid' , id);
+    GetData();
+     GetList();
+   
+}
 
 
 
@@ -222,6 +256,7 @@ useEffect(() => {
 
     GetData();
     GetList();
+    GetColors();
 
 
 },[])
@@ -285,22 +320,16 @@ className='newprice !text-2xl !font-extrabold !text-amber-500'>Rs.{Number(listda
 
 {darkmode ? <span className='text-white'>Color: Black</span> : <span>Color: Black</span>}
 <div className='colorcategorycontainer flex items-center justify-start gap-2'>
-<div className='imagewrapper w-28 h-28 border-2 border-[rgba(0,0,0,0.2)] 
+{
+    colorcategory?.length !== 0 && colorcategory?.map((data , index) => (
+        <div onClick={() => handleColorCategory(data.id)} 
+        key={data.id} className='imagewrapper w-28 h-28 border-2 border-[rgba(0,0,0,0.2)] 
 rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
-<Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${listdata.ProductImages1}`} alt='Color' width={100} height={100} />
+<Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImages1}`} alt='Color' width={100} height={100} />
 </div>
-<div className='imagewrapper w-28 h-28 border-2 border-[rgba(0,0,0,0.2)] 
-rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
-<Image src={color2} alt='Color' width={100} height={100} />
-</div>
-<div className='imagewrapper w-28 h-28 border-2 border-[rgba(0,0,0,0.2)] 
-rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
-<Image src={color3} alt='Color' width={100} height={100} />
-</div>
-<div className='imagewrapper w-28 h-28 border-2 border-[rgba(0,0,0,0.2)] 
-rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
-<Image src={color4} alt='Color' width={100} height={100} />
-</div>
+    ))
+}
+
 </div>
 
 <div className='flex gap-2'>

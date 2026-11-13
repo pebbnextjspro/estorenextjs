@@ -55,7 +55,6 @@ function CategorySlider() {
             
             },[])
 
-            console.log('categorylistdata' , listdata)
       
 
   return (

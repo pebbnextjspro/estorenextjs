@@ -64,6 +64,13 @@ export default function Header() {
         setsearchmobile('');
       }
 
+      const handleLogo = () => {
+
+      
+
+        router.push('/')
+      }
+
 
       const GetData = async () => {
       
@@ -108,13 +115,15 @@ export default function Header() {
 
     }
 
+
+       
     
 
       useEffect(() => {
       
           GetData();
-        
          
+       
       
       },[])
 
@@ -229,10 +238,11 @@ export default function Header() {
           darkmode ? <IoIosMenu color='white' size={30}/> : <IoIosMenu color='black' size={30}/>
         }
         </div>
-      <div className={`logo ${darkmode ? 'dark' : ''}`}>
-<Link href={'/'}>
+      <div onClick={handleLogo}
+       className={`logo cursor-pointer ${darkmode ? 'dark' : ''}`}>
+
 <Image src={logo} alt='Logo'  width={120} height={120}/>
-</Link> 
+
       </div>
       <div>
       <Search/>

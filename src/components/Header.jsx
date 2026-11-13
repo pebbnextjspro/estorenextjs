@@ -16,17 +16,11 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Button } from '@mui/material';
 import { CiHeart } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
-import head2 from '../../nextjs/hero/2.png'
-import head1 from '../../nextjs/hero/1.png'
-import head3 from '../../nextjs/hero/3.png'
-import head4 from '../../nextjs/hero/4.png'
-import head5 from '../../nextjs/hero/5.png'
-import head6 from '../../nextjs/hero/6.png'
-import head7 from '../../nextjs/hero/7.png'
-import head8 from '../../nextjs/hero/8.png'
+
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import clientaxios from './axiosinstance';
+import { useRouter } from 'next/navigation';
 
 const style = {
   position: 'absolute',
@@ -53,12 +47,23 @@ const style = {
 export default function Header() {
 
 
-  const {darkmode , setdarkmode , dropdownactive , setdropdownactive} = useTheme();
+  const {darkmode , setdarkmode , dropdownactive , setdropdownactive,search , setsearch} = useTheme();
   const [sidebaractive , setsidebaractive] = useState(false);
       const [open, setOpen] = useState(false);
       const handleOpen = () => setOpen(true);
       const handleClose = () => setOpen(false);
       const [listdata , setlistdata] = useState([]);
+      const [searchmobile , setsearchmobile] = useState('');
+
+      const router = useRouter();
+
+      const handleSearchIcon = () => {
+
+        setOpen(true);
+        router.push('/');
+        setsearchmobile('');
+      }
+
 
       const GetData = async () => {
       
@@ -67,8 +72,13 @@ export default function Header() {
            const res = await clientaxios.get(`/api/admin/products/product-list`);
       
           if (res.data.success) {
+
+            const sorteddata = [...res.data.Data].sort((a , b) => {
+
+              return a.ProductName.localeCompare(b.ProductName)
+            })
       
-              setlistdata(res.data.Data);
+              setlistdata(sorteddata);
       
           }
       
@@ -86,18 +96,32 @@ export default function Header() {
          }
       }
 
+         const handleSubmit = (id,ProductImages4,ProductCategory) => {
+
+        localStorage.setItem("productid" , id);
+        localStorage.setItem("ProductImages4" , ProductImages4);
+        localStorage.setItem("ProductCategory" , ProductCategory);
+        setOpen(false);
+        setdropdownactive(false)
+
+       router.push('/product')
+
+    }
+
+    
+
       useEffect(() => {
       
           GetData();
+        
          
       
       },[])
 
-      console.log('listdataheader' , listdata)
 
 
   return (
-    <>
+    <>   
        
          <Modal
             open={open}
@@ -106,105 +130,43 @@ export default function Header() {
             aria-describedby="modal-modal-description"
             className='mobilemodelcontainer'
           >
+
+
+
+
           <Box sx={style}>          
              <div className='relative'>
-              <input type="text"
-              placeholder='Search' className='outline-1 w-[280px] !h-[35px] bg-[#E6E6E6] rounded-md px-3 outline-0' /> 
+              <input type="text" value={searchmobile} onChange={(e) => setsearchmobile(e.target.value)}
+              placeholder='Search' className='outline-1 w-70 !h-[35px] bg-[#E6E6E6] rounded-md px-3 outline-0' /> 
               <div className='w-[270px] h-80 absolute left-1 top-9 py-2 px-1 listcont'>
                 <ul>
-                   <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head1} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
+                   {
+  listdata?.length !== 0 && listdata?.filter((data) => {
+    if (searchmobile === '') {
 
-<li className='flex items-center justify-between'
-                   onClick={handleClose}>
+      return data;
+    } else {
+
+      return  data.ProductName?.toLowerCase().includes(searchmobile.trim().toLowerCase());
+    }
+  }).map((data) => (
+     <li key={data.id} className='flex items-center justify-between'
+                   onClick={() => handleSubmit(data.id,data.ProductImages4,data.ProductCategory)}>
               <div>
-                <span className='font-semibold'>Product Name</span>
+                <span className='font-semibold'>{data.ProductName}</span>
                 <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
+    <span className='text-[15px] text-red-500 font-semibold'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
+    <span className='text-[12px] text-black font-semibold line-through'>{'Rs.'+Number(data.ProductOldPrice).toLocaleString("en-pk")}</span>
    </div>
               </div>
               <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head2} alt="headphone" width={100} height={100} className='object-contain' />
+<Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImages1}`} alt="headphone" width={100} height={100} className='object-contain' />
    </div>
             </li>
-            <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head3} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
-            <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head4} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
-            <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head5} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
-            <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head6} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
-            <li className='flex items-center justify-between'
-                   onClick={handleClose}>
-              <div>
-                <span className='font-semibold'>Product Name</span>
-                <div className='flex flex-col'>
-    <span className='text-[15px] text-red-500 font-semibold'>Rs.8,00/-</span>
-    <span className='text-[12px] text-black font-semibold line-through'>Rs.9,00/-</span>
-   </div>
-              </div>
-              <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3 shadow-2xl'>
-<Image src={head7} alt="headphone" width={100} height={100} className='object-contain' />
-   </div>
-            </li>
-            
+  ))
+ }
+
+
               </ul>
               </div>
               </div>          
@@ -295,7 +257,7 @@ export default function Header() {
       </Link>
 {/* //////////////////////////////////////////////////////////// Mobile Search //////////////////////////////////////// */}
 
-      <div className='desktopsearch' onClick={() => setOpen(true)}>
+      <div className='desktopsearch' onClick={handleSearchIcon}>
         {
           darkmode ? <IoSearchOutline color='white' size={30}/> : <IoSearchOutline color='black' size={30}/>
         }
@@ -324,10 +286,18 @@ export default function Header() {
 
 
  {
-  listdata?.length !== 0 && listdata?.map((data) => (
+  listdata?.length !== 0 && listdata?.filter((data) => {
+    if (search === '') {
+
+      return data
+    } else {
+
+      return data.ProductName?.toLowerCase().includes(search.trim().toLowerCase())
+    }
+  }).map((data) => (
      <li key={data.id} className='flex items-start justify-between py-2 cursor-pointer' 
      style={{borderBottom: "1px solid rgba(0,0,0,0.2)"}}
-  onClick={() => setdropdownactive(false)}>
+  onClick={() => handleSubmit(data.id,data.ProductImages4,data.ProductCategory)}>
    <div className='flex gap-2'>
     <div className='imagewrapper w-[80px] h-[80px] flex items-center justify-center border rounded p-3'>
 <Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImages1}`} alt="headphone" width={100} height={100} className='object-contain' />
@@ -349,6 +319,9 @@ export default function Header() {
  
 </ul>
         </div>
+        <Button className='cancebutton' onClick={() => setdropdownactive(false)}>
+         <span>X</span>
+        </Button>
     </div>
     </header>
     </>

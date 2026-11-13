@@ -28,6 +28,8 @@ export default function Hero() {
     const [listdata , setlistdata] = useState([]);
     const [loading , setloading] = useState(false);
 
+         
+
     const router = useRouter();
 
     const GetData = async () => {
@@ -68,13 +70,12 @@ export default function Hero() {
         GetData()
     },[])
 
-    console.log('listdatabanner',listdata)
 
   return (
 
     
    <>
-
+ 
    
  {
     loading &&   <div className='w-full h-[500px] flex items-center justify-content-center'>
@@ -109,7 +110,7 @@ export default function Hero() {
      <Button className='detailsbtn'>
         Details
     </Button>
-  
+
 
     {
     darkmode ? <div className='flex gap-2 items-center'>

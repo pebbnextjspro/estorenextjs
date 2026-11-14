@@ -853,7 +853,11 @@ background-color: #fff;
     border-radius: 10px !important;
 }
 
+.pricefilter input{
 
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+  outline: none;
+}
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 @media (max-width: 480px) {

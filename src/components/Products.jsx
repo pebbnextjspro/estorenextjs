@@ -15,16 +15,83 @@ import { useRouter } from 'next/navigation';
 
 function Products() {
 
-    const {darkmode , setdarkmode} = useTheme();
+    const {darkmode , setdarkmode ,catload , setcatload, categoryid,categorylist,setcategoryid,
+      productcolor , setproductcolor
+    } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
+      
         const router = useRouter();
     
          const GetData = async () => {
           
              try {
           
-               const res = await clientaxios.get(`/api/admin/products/product-list`);
+               const res = await clientaxios.get(`/api/admin/products/product-listnextjs`);
+    
+          
+              if (res.data.success) {
+    
+                // const sorteddata = [...res.data.Data].sort((a , b) => {
+    
+                //   return a.CategoryName.localeCompare(b.CategoryName)
+                // })
+          
+                  setlistdata(res.data.Data);
+          
+              }
+          
+              
+             } catch (error) {
+          
+              if(error.response) {
+          
+                  alert(error.response.data.msg)
+              } else {
+          
+                  alert('Server is not responding')
+              }
+              
+             } 
+          }
+
+           const GetDataByCat = async () => {
+          
+             try {
+          
+    const res = await clientaxios.get(`/api/admin/products/product-listbycategory/${categoryid}`);
+    
+          
+              if (res.data.success) {
+    
+                // const sorteddata = [...res.data.Data].sort((a , b) => {
+    
+                //   return a.CategoryName.localeCompare(b.CategoryName)
+                // })
+          
+                  setlistdata(res.data.Data);
+          
+              }
+          
+              
+             } catch (error) {
+          
+              if(error.response) {
+          
+                  alert(error.response.data.msg)
+              } else {
+          
+                  alert('Server is not responding')
+              }
+              
+             }
+          }
+
+             const GetDataByColor = async () => {
+          
+             try {
+          
+    const res = await clientaxios.get(`/api/admin/products/product-listbycolor/${categoryid}/${productcolor}`);
     
           
               if (res.data.success) {
@@ -61,20 +128,149 @@ function Products() {
        router.push('/product')
 
     }
+
+    const handleAllItemClick = () => {
+
+     setcategoryid(0)
+     setproductcolor('')
     
+    }
+
+const handleColorChange = (e) => {
+
+  const value = e.target.value;
+
+  setproductcolor(value) 
+
+} 
+
+    const Scrolling = () => {
+
+      window.scrollTo({
+        behavior: "smooth",
+        top: 850
+      })
+    }
+
+
             useEffect(() => {
                 
-                    GetData();
+            if (categoryid === 0) {
+
+              GetData();
+            } else {
+
+                GetDataByCat()
+              Scrolling();
+            }
+
+                
+                },[categoryid])
+
+                       useEffect(() => {
+                
+                   if (productcolor === '') {
+
+              GetData();
+            } else {
+
+                GetDataByColor()
+             
+            }              
+
+                
+                },[productcolor])
+
+
+                  useEffect(() => {
+                
+              GetData()
+
+            return () => setcategoryid(0)
                 
                 },[])
+
+
     
-                console.log('productlist' , listdata)
           
 
 
   return (
   <>
-  {
+
+
+  <div className='w-full h-auto rounded bg-white grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4
+  items-center justify-center p-2 gap-2.5 mb-5'>
+  <div>
+{/* 
+    <div>
+      <ul>
+          {
+      listdata?.length !== 0 && listdata?.map((data) => (
+<div onClick={() => handleColorChange(data.ProductColor)}>
+  <li>{data.ProductColor}</li>
+</div>
+      ))
+    }
+      </ul>
+    </div> */}
+     
+  <select
+  className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body"
+  onChange={handleColorChange}
+  defaultValue=""
+>
+  <option
+    value=""
+    disabled
+    style={{ textTransform: "capitalize" }}
+  >
+    Choose Color
+  </option>
+
+  {listdata?.length > 0 &&
+    listdata.map((data) => (
+      <option
+        key={data.id}
+        style={{
+          backgroundColor: data.ProductColor,
+          color: "white",
+          textTransform: "capitalize",
+        }}
+        value={data.ProductColor}
+      >
+        {data.ProductColor}
+      </option>
+    ))}
+</select>
+  </div>
+  <div className='flex items-center pricefilter'>
+   <input type="text" className='w-1/2 h-12 rounded border p-2' placeholder='Price Min'/>
+   <span>-</span>
+   <input type="text" className='w-1/2 h-12 rounded border p-2' placeholder='Price Max'/>
+  </div>
+  <div>
+   <select
+  defaultValue=""
+  className="block w-full px-3 py-2.5 
+  bg-neutral-secondary-medium border border-default-medium text-heading text-sm outline-0 rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+>
+  <option value="" disabled>Choose Rating</option>
+  <option value="US">United States</option>
+  <option value="CA">Canada</option>
+  <option value="FR">France</option>
+  <option value="DE">Germany</option>
+</select>
+  </div>
+  <div>
+    <Button className='w-full h-12 bg-black text-white' onClick={handleAllItemClick}>
+      <span>All Items</span>
+    </Button>
+  </div>
+
+  </div>
+
+  {/* {
     darkmode ? <div className="w-full h-40 bg-[#171717] flex items-center justify-center text-white">
     <h2 className="opacity-80">All Products</h2>
   </div> :
@@ -82,7 +278,9 @@ function Products() {
   <div className="w-full h-20 bg-white flex items-center justify-center text-black">
     <h2 className="opacity-80">All Products</h2>
   </div>
-  }
+  } */}
+
+
 
     <div className={`productcontainer mb-7 ${darkmode ? 'dark' : ''}`}>
     
@@ -156,8 +354,6 @@ function Products() {
       </div>
       ))
      }
-
-   
       
     </div>
   </>

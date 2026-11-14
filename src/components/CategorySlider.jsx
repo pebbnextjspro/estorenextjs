@@ -14,47 +14,16 @@ import clientaxios from "./axiosinstance";
 
 function CategorySlider() {
   
-    const {darkmode , setdarkmode} = useTheme();
-    const [listdata , setlistdata] = useState([]);
+    const {darkmode  ,setcategoryid, categorylist } = useTheme();
+   
 
-     const GetData = async () => {
-      
-         try {
-      
-           const res = await clientaxios.get(`/api/admin/category/category-list`);
+    const handleSubmit = (id) => {
 
-      
-          if (res.data.success) {
+      setcategoryid(id);
+    }
 
-            // const sorteddata = [...res.data.Data].sort((a , b) => {
-
-            //   return a.CategoryName.localeCompare(b.CategoryName)
-            // })
+    
       
-              setlistdata(res.data.Data);
-      
-          }
-      
-          
-         } catch (error) {
-      
-          if(error.response) {
-      
-              alert(error.response.data.msg)
-          } else {
-      
-              alert('Server is not responding')
-          }
-          
-         }
-      }
-
-        useEffect(() => {
-            
-                GetData();
-            
-            },[])
-
       
 
   return (
@@ -96,8 +65,9 @@ function CategorySlider() {
  
 
  {
-  listdata?.length !== 0 && listdata?.map((data) => (
+  categorylist?.length !== 0 && categorylist?.map((data) => (
     <SwiperSlide
+    onClick={() => handleSubmit(data.id)}
     key={data.id} className="!flex !flex-col !items-center !justify-center !bg-white !p-7 !rounded-2xl
   !w-40 !h-40 !cursor-pointer categoryslider">
           

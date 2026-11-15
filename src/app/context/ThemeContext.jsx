@@ -14,6 +14,7 @@ export function ThemeProvider({ children }) {
     const [categoryid ,setcategoryid ] = useState(0)
      const [categorylist , setcategorylist] = useState([]);
      const [productcolor , setproductcolor] = useState('white')
+     const [productmaxprice , setproductmaxprice] = useState(0)
 
       const GeCategoryData = async () => {
       
@@ -60,7 +61,7 @@ console.log('categoryidtheme' , categoryid)
   return (
     <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading,
       search , setsearch,catload , setcatload,categoryid ,setcategoryid,categorylist , setcategorylist,
-      productcolor , setproductcolor
+      productcolor , setproductcolor,productmaxprice , setproductmaxprice
       }}>
       {children}
     </ThemeContext.Provider>

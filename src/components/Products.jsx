@@ -20,6 +20,8 @@ function Products() {
     } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
+        const [minprice , setminprice] = useState(100);
+        const [maxprice , setmaxprice] = useState(0);
       
         const router = useRouter();
     
@@ -132,7 +134,7 @@ function Products() {
     const handleAllItemClick = () => {
 
      setcategoryid(0)
-     setproductcolor('')
+     setproductcolor("")
     
     }
 
@@ -216,9 +218,10 @@ const handleColorChange = (e) => {
     </div> */}
      
   <select
-  className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body"
+  className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border 
+  border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body"
   onChange={handleColorChange}
-  defaultValue=""
+  value={productcolor}
 >
   <option
     value=""
@@ -245,9 +248,12 @@ const handleColorChange = (e) => {
 </select>
   </div>
   <div className='flex items-center pricefilter'>
-   <input type="text" className='w-1/2 h-12 rounded border p-2' placeholder='Price Min'/>
+   <input type="number" value={minprice} readOnly 
+    onChange={(e) => setminprice(e.target.value)}
+    className='w-1/2 h-12 rounded border p-2 caret-amber-50 cursor-default' placeholder='Price Min'/>
    <span>-</span>
-   <input type="text" className='w-1/2 h-12 rounded border p-2' placeholder='Price Max'/>
+   <input type="number" value={maxprice} onChange={(e) => setmaxprice(e.target.value)}
+    className='w-1/2 h-12 rounded border p-2' placeholder='Price Max'/>
   </div>
   <div>
    <select

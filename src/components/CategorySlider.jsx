@@ -14,12 +14,13 @@ import clientaxios from "./axiosinstance";
 
 function CategorySlider() {
   
-    const {darkmode  ,setcategoryid, categorylist } = useTheme();
+    const {darkmode  ,setcategoryid, categorylist,setproductcolor } = useTheme();
    
 
     const handleSubmit = (id) => {
 
       setcategoryid(id);
+    
     }
 
     

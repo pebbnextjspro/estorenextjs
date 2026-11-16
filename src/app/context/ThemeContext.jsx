@@ -14,7 +14,8 @@ export function ThemeProvider({ children }) {
     const [categoryid ,setcategoryid ] = useState(0)
      const [categorylist , setcategorylist] = useState([]);
      const [productcolor , setproductcolor] = useState('Select Color')
-     const [productmaxprice , setproductmaxprice] = useState(0)
+     const [productmaxprice , setproductmaxprice] = useState(0);
+     const [activecontext , setactivecontext] = useState(false)
 
       const GeCategoryData = async () => {
       
@@ -62,7 +63,7 @@ console.log('procolor' , productcolor)
   return (
     <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading,
       search , setsearch,catload , setcatload,categoryid ,setcategoryid,categorylist , setcategorylist,
-      productcolor , setproductcolor,productmaxprice , setproductmaxprice
+      productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext
       }}>
       {children}
     </ThemeContext.Provider>

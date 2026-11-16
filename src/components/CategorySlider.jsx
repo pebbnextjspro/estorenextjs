@@ -14,13 +14,13 @@ import clientaxios from "./axiosinstance";
 
 function CategorySlider() {
   
-    const {darkmode  ,setcategoryid, categorylist,setproductcolor } = useTheme();
+    const {darkmode  ,setcategoryid, categorylist,setproductcolor, setactivecontext } = useTheme();
    
 
     const handleSubmit = (id) => {
 
       setcategoryid(id);
-    
+    setactivecontext(false);
     }
 
     
@@ -69,8 +69,8 @@ function CategorySlider() {
   categorylist?.length !== 0 && categorylist?.map((data) => (
     <SwiperSlide
     onClick={() => handleSubmit(data.id)}
-    key={data.id} className="!flex !flex-col !items-center !justify-center !bg-white !p-7 !rounded-2xl
-  !w-40 !h-40 !cursor-pointer categoryslider">
+    key={data.id} className="flex! flex-col! items-center! justify-center! bg-white! p-7! rounded-2xl!
+  w-40! h-40! cursor-pointer! categoryslider">
           
                 <Image
                   src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.CategoryImgUrl}`}

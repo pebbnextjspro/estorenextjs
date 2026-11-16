@@ -12,13 +12,13 @@ import head1 from '../../nextjs/hero/1.png'
 import clientaxios from './axiosinstance';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify/unstyled';
-import SelectComponent from './SelectComponent';
+import SelectColor from './SelectColor';
 
 
 function Products() {
 
     const {darkmode , setdarkmode ,catload , setcatload, categoryid,categorylist,setcategoryid,
-      productmaxprice , setproductmaxprice,setproductcolor
+      productmaxprice , setproductmaxprice,setproductcolor,productcolor,setactivecontext
     } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
@@ -56,7 +56,10 @@ function Products() {
                   alert('Server is not responding')
               }
               
-             } 
+             } finally {
+
+              setproductcolor("Select Color")
+             }
           }
 
            const GetDataByCat = async () => {
@@ -170,6 +173,7 @@ function Products() {
      setcategoryid(0)
     setproductcolor("Select Color")
      setproductmaxprice(0)
+     setactivecontext(false)
     
     }
 
@@ -244,19 +248,19 @@ const handlePriceChange = (e) => {
                 
                 },[categoryid])
 
-            //            useEffect(() => {
+                       useEffect(() => {
                 
-            //        if (productcolor === '') {
+                   if (productcolor === 'Select Color') {
 
-            //   GetData();
-            // } else {
+              GetData();
+            } else {
 
-            //     GetDataByColor()
+                GetDataByColor()
              
-            // }              
+            }              
 
                 
-            //     },[productcolor])
+                },[productcolor])
 
             //         useEffect(() => {
                 
@@ -306,7 +310,7 @@ const handlePriceChange = (e) => {
       </ul>
     </div> */}
 
-    <SelectComponent arraydata={listdata}/>
+    <SelectColor arraydata={listdata}/>
      
   {/* <select
   className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border 
@@ -435,13 +439,13 @@ const handlePriceChange = (e) => {
      {
     darkmode ? <div className='flex gap-2 items-center procontainer'>
      <span 
-     className='newprice !text-2xl !font-extrabold !text-amber-500'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
+     className='newprice text-2xl! font-extrabold! text-amber-500!'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
     <span 
-    className='oldprice !text-white'>{'Rs.'+Number(data.ProductOldPrice).toLocaleString("en-pk")}</span>
+    className='oldprice text-white!'>{'Rs.'+Number(data.ProductOldPrice).toLocaleString("en-pk")}</span>
    </div> :
 
    <div className='flex gap-2 items-center procontainer'>
-     <span className='newprice !text-2xl !font-extrabold'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
+     <span className='newprice text-2xl! font-extrabold!'>{'Rs.'+Number(data.ProductNewPrice).toLocaleString("en-pk")}</span>
     <span className='oldprice'>{'Rs.'+Number(data.ProductOldPrice).toLocaleString("en-pk")}</span>
    </div>
    }

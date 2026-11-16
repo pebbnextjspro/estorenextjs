@@ -54,7 +54,7 @@ function Search() {
 
     <div className='searchbar' onClick={handleClick}>
         <input value={search} onChange={(e) => setsearch(e.target.value)}
-         type="text" className='!w-[600px] !h-[45px] bg-[#E6E6E6] rounded-md px-3 outline-0 searchinput' />
+         type="text" className='w-150! h-11.25! bg-[#E6E6E6] rounded-md px-3 outline-0 searchinput' />
         <Button ><IoSearchOutline size={25}/></Button>
         {/* <div className='dropdown'>
 

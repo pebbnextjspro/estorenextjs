@@ -11,12 +11,14 @@ import Link from 'next/link';
 import head1 from '../../nextjs/hero/1.png'
 import clientaxios from './axiosinstance';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify/unstyled';
+import SelectComponent from './SelectComponent';
 
 
 function Products() {
 
     const {darkmode , setdarkmode ,catload , setcatload, categoryid,categorylist,setcategoryid,
-      productcolor , setproductcolor
+      productmaxprice , setproductmaxprice,setproductcolor
     } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
@@ -118,6 +120,38 @@ function Products() {
                   alert('Server is not responding')
               }
               
+             } 
+          }
+
+            const GetDataByPrice = async () => {
+          
+             try {
+          
+    const res = await clientaxios.get(`/api/admin/products/product-listbypricenext/${productmaxprice}/${categoryid}`);
+    
+          
+              if (res.data.success) {
+    
+                // const sorteddata = [...res.data.Data].sort((a , b) => {
+    
+                //   return a.CategoryName.localeCompare(b.CategoryName)
+                // })
+          
+                  setlistdata(res.data.Data);
+          
+              }
+          
+              
+             } catch (error) {
+          
+              if(error.response) {
+          
+                  alert(error.response.data.msg)
+              } else {
+          
+                  alert('Server is not responding')
+              }
+              
              }
           }
 
@@ -134,7 +168,8 @@ function Products() {
     const handleAllItemClick = () => {
 
      setcategoryid(0)
-     setproductcolor("")
+    setproductcolor("Select Color")
+     setproductmaxprice(0)
     
     }
 
@@ -146,6 +181,46 @@ const handleColorChange = (e) => {
 
 } 
 
+const handlePriceClick = () => {
+
+  if (categoryid === 0) {
+
+    toast.error('First Select Category')
+  } else if (productmaxprice === 0) {
+
+        toast.error('Please Insert Max')
+
+
+  } else {
+
+    GetDataByPrice()
+  }
+ 
+}
+
+const handleKeyDown = (e) => {
+
+if (e.key === "Enter") {
+
+  GetDataByPrice();
+}
+}
+
+// const handleColorAlert = () => {
+
+//   if (categoryid === 0) {
+
+//     toast.error("Please Select Category First")
+//   }
+// }
+
+const handlePriceChange = (e) => {
+
+  const value = e.target.value;
+
+  setproductmaxprice(value)
+
+}
     const Scrolling = () => {
 
       window.scrollTo({
@@ -169,19 +244,33 @@ const handleColorChange = (e) => {
                 
                 },[categoryid])
 
-                       useEffect(() => {
+            //            useEffect(() => {
                 
-                   if (productcolor === '') {
+            //        if (productcolor === '') {
 
-              GetData();
-            } else {
+            //   GetData();
+            // } else {
 
-                GetDataByColor()
+            //     GetDataByColor()
              
-            }              
+            // }              
 
                 
-                },[productcolor])
+            //     },[productcolor])
+
+            //         useEffect(() => {
+                
+            //        if (productmaxprice === 0) {
+
+            //   GetData();
+            // } else {
+
+            //     GetDataByPrice()
+             
+            // }              
+
+                
+            //     },[productmaxprice])
 
 
                   useEffect(() => {
@@ -216,12 +305,14 @@ const handleColorChange = (e) => {
     }
       </ul>
     </div> */}
+
+    <SelectComponent arraydata={listdata}/>
      
-  <select
+  {/* <select
   className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border 
   border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body"
   onChange={handleColorChange}
-  value={productcolor}
+  value={productcolor}     
 >
   <option
     value=""
@@ -245,16 +336,19 @@ const handleColorChange = (e) => {
         {data.ProductColor}
       </option>
     ))}
-</select>
+</select> */}
   </div>
   <div className='flex items-center pricefilter'>
    <input type="number" value={minprice} readOnly 
     onChange={(e) => setminprice(e.target.value)}
     className='w-1/2 h-12 rounded border p-2 caret-amber-50 cursor-default' placeholder='Price Min'/>
    <span>-</span>
-   <input type="number" value={maxprice} onChange={(e) => setmaxprice(e.target.value)}
+   <input type="number" value={productmaxprice}  onChange={handlePriceChange} onKeyDown={handleKeyDown}
+   onClick={() => setproductmaxprice('')}
     className='w-1/2 h-12 rounded border p-2' placeholder='Price Max'/>
+    <Button onClick={handlePriceClick}>Get Data</Button>
   </div>
+  
   <div>
    <select
   defaultValue=""
@@ -275,6 +369,7 @@ const handleColorChange = (e) => {
   </div>
 
   </div>
+
 
   {/* {
     darkmode ? <div className="w-full h-40 bg-[#171717] flex items-center justify-center text-white">

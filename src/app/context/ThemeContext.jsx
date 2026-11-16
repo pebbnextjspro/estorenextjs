@@ -13,7 +13,7 @@ export function ThemeProvider({ children }) {
     const [catload , setcatload] = useState(false)
     const [categoryid ,setcategoryid ] = useState(0)
      const [categorylist , setcategorylist] = useState([]);
-     const [productcolor , setproductcolor] = useState('white')
+     const [productcolor , setproductcolor] = useState('Select Color')
      const [productmaxprice , setproductmaxprice] = useState(0)
 
       const GeCategoryData = async () => {
@@ -56,6 +56,7 @@ export function ThemeProvider({ children }) {
 
     
 console.log('categoryidtheme' , categoryid)
+console.log('procolor' , productcolor)
   
 
   return (

@@ -10,6 +10,7 @@ import BlackPage from "@/components/BlackPage";
 import ToastProvider from "@/components/ToastProvider";
 import "react-toastify/ReactToastify.css";
 import BlackScreen from "@/components/BlackScreen";
+import WhatsappButton from "@/components/WhatsappButton";
 
 
 const geistSans = Geist({
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
            <Header/>
         
         {children}
+        <WhatsappButton/>
         <Footer/>
        
          <ToastProvider/>

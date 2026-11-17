@@ -202,6 +202,23 @@ const handlePriceClick = () => {
  
 }
 
+const handleColorClick = () => {
+
+  if (categoryid === 0) {
+
+    toast.error('First Select Category')
+  } else if (productcolor === "Select Color") {
+
+        toast.error('Please Insert Max')
+
+
+  } else {
+
+    GetDataByColor()
+  }
+ 
+}
+
 const handleKeyDown = (e) => {
 
 if (e.key === "Enter") {
@@ -248,19 +265,19 @@ const handlePriceChange = (e) => {
                 
                 },[categoryid])
 
-                       useEffect(() => {
+            //            useEffect(() => {
                 
-                   if (productcolor === 'Select Color') {
+            //        if (productcolor === 'Select Color') {
 
-              GetData();
-            } else {
+            //   GetData();
+            // } else {
 
-                GetDataByColor()
+            //     GetDataByColor()
              
-            }              
+            // }              
 
                 
-                },[productcolor])
+            //     },[productcolor])
 
             //         useEffect(() => {
                 
@@ -295,8 +312,8 @@ const handlePriceChange = (e) => {
 
 
   <div className='w-full h-auto rounded bg-white grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4
-  items-center justify-center p-2 gap-2.5 mb-5'>
-  <div>
+  items-center justify-center p-2 gap-2.5'>
+  <div className='flex'>
 {/* 
     <div>
       <ul>
@@ -311,36 +328,11 @@ const handlePriceChange = (e) => {
     </div> */}
 
     <SelectColor arraydata={listdata}/>
+     <Button className='capitalize! bg-black! h-12! ml-2! text-white!' onClick={handleColorClick}>
+      <span className='text-[10px]! font-semibold'>Get Data</span>
+    </Button>
      
-  {/* <select
-  className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border 
-  border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body"
-  onChange={handleColorChange}
-  value={productcolor}     
->
-  <option
-    value=""
-    disabled
-    style={{ textTransform: "capitalize" }}
-  >
-    Choose Color
-  </option>
-
-  {listdata?.length > 0 &&
-    listdata.map((data) => (
-      <option
-        key={data.id}
-        style={{
-          backgroundColor: data.ProductColor,
-          color: "white",
-          textTransform: "capitalize",
-        }}
-        value={data.ProductColor}
-      >
-        {data.ProductColor}
-      </option>
-    ))}
-</select> */}
+  
   </div>
   <div className='flex items-center pricefilter'>
    <input type="number" value={minprice} readOnly 
@@ -350,7 +342,9 @@ const handlePriceChange = (e) => {
    <input type="number" value={productmaxprice}  onChange={handlePriceChange} onKeyDown={handleKeyDown}
    onClick={() => setproductmaxprice('')}
     className='w-1/2 h-12 rounded border p-2' placeholder='Price Max'/>
-    <Button onClick={handlePriceClick}>Get Data</Button>
+    <Button className='capitalize! bg-black! h-12! ml-2! text-white!' onClick={handlePriceClick}>
+      <span className='text-[10px]! font-semibold'>Get Data</span>
+    </Button>
   </div>
   
   <div>

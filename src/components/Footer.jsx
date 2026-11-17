@@ -13,6 +13,8 @@ import { RiHomeOfficeFill } from "react-icons/ri";
 import { MdLocalPostOffice } from "react-icons/md";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { RiInstagramFill } from "react-icons/ri";
+import logo from '../../public/logo.png'
+
 
 
 
@@ -29,8 +31,8 @@ export default function Footer() {
  <div className={`footcontainer w-full h-full container-fluid ${darkmode ? 'dark' : ''}`}>
 <div className={`contentcontainer grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5
   p-7 container-fluid ${darkmode ? 'dark' : ''}`}>
-  <div>
-<Image src='./logo.png' width={200} height={200} alt='Logo' />
+  <div className='footerlogowrapper'>
+<Image src={logo} width={200} height={200} alt='Logo' />
   </div>
 <div className='flex justify-self-start flex-col'>
 {
@@ -86,7 +88,7 @@ export default function Footer() {
   <span className='mb-5 font-semibold'>Follow Us</span>
 }
 
-  <ul className={`p-0 text-[17px] opacity-90 flex flex-col gap-2 cursor-pointer !text-3xl capitalize ${darkmode ? 'dark' : ''}`}>
+  <ul className={`p-0 text-[17px] opacity-90 flex flex-col gap-2 cursor-pointer text-3xl! capitalize ${darkmode ? 'dark' : ''}`}>
    <li><FaFacebookF/></li>
    <li><RiInstagramFill/></li>
    <li><FaYoutube/></li>

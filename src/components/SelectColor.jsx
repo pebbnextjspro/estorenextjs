@@ -14,7 +14,7 @@ function SelectColor({arraydata}) {
 
    <>
    
-   <div className='relative z-10' onClick={() => setactivecontext(!activecontext)}>
+   <div className='relative z-10 w-full' onClick={() => setactivecontext(!activecontext)}>
       <input type="text" value={productcolor} onChange={(e) => setproductcolor(e.target.value)}
       className='className="block w-full px-3 py-2.5 bg-neutral-secondary-medium border
   border-default-medium text-heading text-sm rounded-base outline-0 shadow-xs placeholder:text-body cursor-pointer
@@ -27,10 +27,11 @@ function SelectColor({arraydata}) {
       <li className='text-[18px] !w-full h-[35px] hover:bg-blue-600 hover:text-white'>Data</li> */}
       {
         arraydata?.length !== 0 && arraydata?.map((data) => (
-            <div className='flex items-center justify-between cursor-pointer' key={data.id}>
+            <div className='flex items-center justify-between' key={data.id} onClick={() => setproductcolor(data.ProductColor)}>
                 <li onClick={() => setproductcolor(data.ProductColor)}
-                className='text-[18px] cursor-pointer capitalize'>{data.ProductColor}</li>
-                <div className='w-7.5 h-7.5 rounded-full' style={{backgroundColor: data.ProductColor}}>
+                className='text-[18px] capitalize'>{data.ProductColor}</li>
+                <div onClick={() => setproductcolor(data.ProductColor)}
+                 className='w-7.5 h-7.5 rounded-full' style={{backgroundColor: data.ProductColor}}>
                  
                 </div>
             </div>

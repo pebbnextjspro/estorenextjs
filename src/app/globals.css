@@ -875,6 +875,11 @@ background-color: #fff;
 
 @media (max-width: 480px) {
 
+  .totalprice{
+
+    display: none;
+  }
+
   .modelcontainer{
 
     width: 100%;

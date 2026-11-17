@@ -47,7 +47,9 @@ const style = {
 export default function Header() {
 
 
-  const {darkmode , setdarkmode , dropdownactive , setdropdownactive,search , setsearch} = useTheme();
+  const {darkmode , setdarkmode , dropdownactive , setdropdownactive,search , setsearch,cartcounter,
+    cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
+  } = useTheme();
   const [sidebaractive , setsidebaractive] = useState(false);
       const [open, setOpen] = useState(false);
       const handleOpen = () => setOpen(true);
@@ -277,9 +279,12 @@ export default function Header() {
       <Link href={'/cart'} className='flex justify-center items-center relative'>
       {darkmode ? <CiShoppingCart style={{color: "#fff"}} size={35}/> : <CiShoppingCart style={{color: "#000"}} size={35}/>}
    <span className='w-6 h-6 bg-red-500 rounded-full flex justify-center items-center text-white font-bold
-   absolute -top-2 -right-2'>10</span>
+   absolute -top-2 -right-1'>{cartserverqty}</span>
       </Link>
-
+        <div className='flex flex-col justify-center items-center totalprice'>
+          <span className='font-semibold text-[#6f5109]'>Total Price</span>
+          <span className='font-semibold text-green-800'>{(cartserverprice).toLocaleString("en-pk")}</span>
+        </div>
        <Link href={'/user'} className='flex justify-center items-center relative logincontainer'>
       {darkmode ? <CiUser style={{color: "#fff"}} size={35}/> : <CiUser style={{color: "#000"}} size={35}/>}
       </Link>

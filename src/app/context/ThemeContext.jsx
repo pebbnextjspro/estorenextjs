@@ -15,7 +15,13 @@ export function ThemeProvider({ children }) {
      const [categorylist , setcategorylist] = useState([]);
      const [productcolor , setproductcolor] = useState('Select Color')
      const [productmaxprice , setproductmaxprice] = useState(0);
-     const [activecontext , setactivecontext] = useState(false)
+     const [activecontext , setactivecontext] = useState(false);
+     const [cartcounter , setcartcounter] = useState(0);
+     const [cartserverqty , setcartserverqty] = useState()
+     const [cartserverprice , setcartserverprice] = useState()
+
+    
+
 
       const GeCategoryData = async () => {
       
@@ -55,15 +61,12 @@ export function ThemeProvider({ children }) {
             
             },[])
 
-    
-console.log('categoryidtheme' , categoryid)
-console.log('procolor' , productcolor)
-  
 
   return (
     <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading,
       search , setsearch,catload , setcatload,categoryid ,setcategoryid,categorylist , setcategorylist,
-      productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext
+      productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext,
+      cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
       }}>
       {children}
     </ThemeContext.Provider>

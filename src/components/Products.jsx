@@ -13,12 +13,14 @@ import clientaxios from './axiosinstance';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify/unstyled';
 import SelectColor from './SelectColor';
+import BlackScreen from './BlackScreen';
 
 
 function Products() {
 
     const {darkmode , setdarkmode ,catload , setcatload, categoryid,categorylist,setcategoryid,
-      productmaxprice , setproductmaxprice,setproductcolor,productcolor,setactivecontext
+      productmaxprice , setproductmaxprice,setproductcolor,productcolor,setactivecontext,setcartcounter,cartcounter,
+      loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
     } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
@@ -26,6 +28,74 @@ function Products() {
         const [maxprice , setmaxprice] = useState(0);
       
         const router = useRouter();
+
+           const GetCartPrice = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${1}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductNewPrice)
+      
+              setcartserverprice(Number(getqty));
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
+
+           const GetCartQty = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${1}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductQty)
+      
+              setcartserverqty(Number(getqty));
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
     
          const GetData = async () => {
           
@@ -177,13 +247,7 @@ function Products() {
     
     }
 
-const handleColorChange = (e) => {
 
-  const value = e.target.value;
-
-  setproductcolor(value) 
-
-} 
 
 const handlePriceClick = () => {
 
@@ -227,13 +291,7 @@ if (e.key === "Enter") {
 }
 }
 
-// const handleColorAlert = () => {
 
-//   if (categoryid === 0) {
-
-//     toast.error("Please Select Category First")
-//   }
-// }
 
 const handlePriceChange = (e) => {
 
@@ -248,6 +306,45 @@ const handlePriceChange = (e) => {
         behavior: "smooth",
         top: 850
       })
+    }
+
+    const handleCartButton = async (ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1) => {
+
+        setloading(true)
+
+      try {
+
+        const res = await clientaxios.post('/api/admin/cart/cart-create' , {ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1});
+
+      if (res.data.success) {
+
+        toast.success(res.data.msg)
+      } else {
+
+        toast.error(res.data.msg)
+      }
+        
+      } catch (error) {
+
+        if (error.response) {
+
+          toast.error(error.response.data.msg)
+        } else {
+
+          toast.error('Server is not responding')
+        }
+        
+      } finally {
+
+        setloading(false);
+        GetCartQty();
+        GetCartPrice();
+      }
+
+      
+
     }
 
 
@@ -265,52 +362,26 @@ const handlePriceChange = (e) => {
                 
                 },[categoryid])
 
-            //            useEffect(() => {
-                
-            //        if (productcolor === 'Select Color') {
-
-            //   GetData();
-            // } else {
-
-            //     GetDataByColor()
-             
-            // }              
-
-                
-            //     },[productcolor])
-
-            //         useEffect(() => {
-                
-            //        if (productmaxprice === 0) {
-
-            //   GetData();
-            // } else {
-
-            //     GetDataByPrice()
-             
-            // }              
-
-                
-            //     },[productmaxprice])
-
+          
 
                   useEffect(() => {
                 
-              GetData()
+              GetData();
+              GetCartQty();
+                      GetCartPrice();
+
 
             return () => setcategoryid(0)
                 
                 },[])
 
 
-    
-          
-
-
   return (
   <>
 
-
+{
+ loading &&  <BlackScreen/>
+}
   <div className='w-full h-auto rounded bg-white grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4
   items-center justify-center p-2 gap-2.5'>
   <div className='flex'>
@@ -350,6 +421,7 @@ const handlePriceChange = (e) => {
   <div>
    <select
   defaultValue=""
+  disabled
   className="block w-full px-3 py-2.5 
   bg-neutral-secondary-medium border border-default-medium text-heading text-sm outline-0 rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
 >
@@ -444,7 +516,8 @@ const handlePriceChange = (e) => {
    </div>
    }
     <div className='flex gap-2 items-center'>
-    <Button >
+    <Button onClick={() => handleCartButton(data.id,data.ProductName,data.ProductImages2,data.ProductColor,
+      data.ProductNewPrice,data.ProductOldPrice,1,1,1,data.ProductImages1)}>
           <RiShoppingCart2Fill/></Button>
    
     <span className='stock'>IN STOCK</span>

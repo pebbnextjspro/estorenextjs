@@ -4,15 +4,18 @@ import CategorySlider from "@/components/CategorySlider";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
 import { useEffect } from "react";
+import { useTheme } from "./context/ThemeContext";
 
 export default function Home() {
 
-//   useEffect(() => {
+  const { headeractive , setheaderactive} = useTheme()
 
-// console.log("main page render");
+  useEffect(() => {
+
+setheaderactive(true)
 
 
-//   },[])
+  },[])
 
 
   return (

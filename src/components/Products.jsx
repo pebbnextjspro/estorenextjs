@@ -33,7 +33,7 @@ function Products() {
       
          try {
       
-           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${1}`);
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
 
       
           if (res.data.success) {
@@ -67,7 +67,7 @@ function Products() {
       
          try {
       
-           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${1}`);
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
 
       
           if (res.data.success) {
@@ -315,6 +315,12 @@ const handlePriceChange = (e) => {
 
       try {
 
+        if (!localStorage.getItem('userid')) {
+
+          toast.error('Please Sign IN');
+          return
+        }
+
         const res = await clientaxios.post('/api/admin/cart/cart-create' , {ProductId,ProductName,ProductImages2,ProductColor,
       ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1});
 
@@ -362,7 +368,7 @@ const handlePriceChange = (e) => {
                 
                 },[categoryid])
 
-          
+      
 
                   useEffect(() => {
                 
@@ -517,7 +523,7 @@ const handlePriceChange = (e) => {
    }
     <div className='flex gap-2 items-center'>
     <Button onClick={() => handleCartButton(data.id,data.ProductName,data.ProductImages2,data.ProductColor,
-      data.ProductNewPrice,data.ProductOldPrice,1,1,1,data.ProductImages1)}>
+      data.ProductNewPrice,data.ProductOldPrice,1,localStorage.getItem('userid'),1,data.ProductImages1)}>
           <RiShoppingCart2Fill/></Button>
    
     <span className='stock'>IN STOCK</span>

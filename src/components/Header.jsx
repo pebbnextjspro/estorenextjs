@@ -21,6 +21,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import clientaxios from './axiosinstance';
 import { useRouter } from 'next/navigation';
+import PopUpUSer from './Login/PopUpUser';
 
 const style = {
   position: 'absolute',
@@ -48,7 +49,8 @@ export default function Header() {
 
 
   const {darkmode , setdarkmode , dropdownactive , setdropdownactive,search , setsearch,cartcounter,
-    cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
+    cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,popupuseractive , setpopupuseractive,
+    headeractive , setheaderactive
   } = useTheme();
   const [sidebaractive , setsidebaractive] = useState(false);
       const [open, setOpen] = useState(false);
@@ -118,8 +120,6 @@ export default function Header() {
     }
 
 
-       
-    
 
       useEffect(() => {
       
@@ -130,11 +130,17 @@ export default function Header() {
       },[])
 
 
-
   return (
     <>   
+
+    {
+popupuseractive && <PopUpUSer/>
+      
+    }
        
-         <Modal
+      {
+        headeractive && <div>
+             <Modal
             open={open}
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
@@ -283,11 +289,13 @@ export default function Header() {
       </Link>
         <div className='flex flex-col justify-center items-center totalprice'>
           <span className='font-semibold text-[#6f5109]'>Total Price</span>
-          <span className='font-semibold text-green-800'>{(cartserverprice).toLocaleString("en-pk")}</span>
+          <span className='font-semibold text-green-800'>{Number(cartserverprice).toLocaleString("en-pk")}</span>
         </div>
-       <Link href={'/user'} className='flex justify-center items-center relative logincontainer'>
-      {darkmode ? <CiUser style={{color: "#fff"}} size={35}/> : <CiUser style={{color: "#000"}} size={35}/>}
-      </Link>
+       <div onClick={() => setpopupuseractive(!popupuseractive)}
+       className='flex justify-center items-center relative cursor-pointer logincontainer'>
+      {darkmode ? <CiUser style={{color: "#fff"}} size={35}/> : <CiUser style={{color: "#000"}} size={35}
+      />}
+      </div>
       
     </div>
 
@@ -339,6 +347,8 @@ export default function Header() {
         </Button>
     </div>
     </header>
+        </div>
+      }
     </>
   )
 }

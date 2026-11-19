@@ -19,8 +19,12 @@ export function ThemeProvider({ children }) {
      const [cartcounter , setcartcounter] = useState(0);
      const [cartserverqty , setcartserverqty] = useState()
      const [cartserverprice , setcartserverprice] = useState()
+     const [contextsingleitemqty , setcontextsingleitemqty] = useState(1);
+     const [userid , setuserid] = useState(0);
+     const [popupuseractive , setpopupuseractive] = useState(false)
+     const [headeractive , setheaderactive] = useState(true)
 
-    
+     
 
 
       const GeCategoryData = async () => {
@@ -61,12 +65,14 @@ export function ThemeProvider({ children }) {
             
             },[])
 
-
+console.log(popupuseractive)
   return (
     <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading,
       search , setsearch,catload , setcatload,categoryid ,setcategoryid,categorylist , setcategorylist,
       productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext,
-      cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
+      cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
+      contextsingleitemqty , setcontextsingleitemqty,userid , setuserid,popupuseractive , setpopupuseractive,
+      headeractive , setheaderactive
       }}>
       {children}
     </ThemeContext.Provider>

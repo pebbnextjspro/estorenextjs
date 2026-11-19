@@ -53,6 +53,41 @@ function SingleProduct() {
     const [prevuserimage , setprevuserimage] = useState();
     const [colorcategory , setcolorcategory] = useState([]);
 
+    //  const GetSingleQtyData = async () => {
+           
+    //           try {
+           
+    //             const res = await clientaxios.get(`/api/admin/cart/singleitem-qty/${1}/${25}`);
+     
+           
+    //            if (res.data.success) {
+     
+    //              // const sorteddata = [...res.data.Data].sort((a , b) => {
+     
+    //              //   return a.CategoryName.localeCompare(b.CategoryName)
+    //              // })
+     
+    //              const getqty = (res.data.Data[0].ProductQty)
+           
+    //                setcontextsingleitemqty(Number(getqty));
+           
+    //            }
+           
+               
+    //           } catch (error) {
+           
+    //            if(error.response) {
+           
+    //                alert(error.response.data.msg)
+    //            } else {
+           
+    //                alert('Server is not responding')
+    //            }
+               
+    //           }
+    //        }
+    
+
      const GetColors = async () => {
 
         setloading(true)
@@ -233,12 +268,7 @@ const GetData = async () => {
    }
 }
 
-    const handleOnChange = (e) => {
-
-        const value = e.target.value;
-
-        setcounter(value)
-    }
+    
 
 console.log('listdata' , listdata.id)
 
@@ -257,6 +287,8 @@ useEffect(() => {
     GetData();
     GetList();
     GetColors();
+    // GetSingleQtyData();
+
 
 
 },[])
@@ -341,17 +373,16 @@ rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
     </Button>
 </div>
 
-<div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
+{/* <div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
     
     <Button>
         <span className='text-black text-3xl'>-</span>
     </Button>
-    <input className='text-center w-20 outline-0 font-bold'
-     type="text" value={counter} onChange={handleOnChange} readOnly />
+    <span className='text-center w-20 outline-0 font-bold'>{contextsingleitemqty}</span>
     <Button>
         <span className='text-black text-2xl'>+</span>
     </Button>
-</div>
+</div> */}
 
 <div className='flex gap-2 justify-between'>
     <div className='w-full h-20 bg-white flex flex-col items-center justify-center border border-[rgba(0,0,0,0.2)] rounded'>

@@ -5,15 +5,22 @@ import Hero from "@/components/Hero";
 import Products from "@/components/Products";
 import { useEffect } from "react";
 import { useTheme } from "./context/ThemeContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
 
   const { headeractive , setheaderactive} = useTheme()
+  const router = useRouter();
 
   useEffect(() => {
 
-setheaderactive(true)
+if (!localStorage.getItem('userid')) {
+  router.push('/login')
+} else {
 
+  setheaderactive(true)
+
+}
 
   },[])
 

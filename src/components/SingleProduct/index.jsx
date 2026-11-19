@@ -19,7 +19,6 @@ import { Button } from '@mui/material';
 import color2 from '../../../nextjs/color2.png'
 import color3 from '../../../nextjs/color3.png'
 import color4 from '../../../nextjs/color4.png'
-import { useRouter } from 'next/navigation';
 import { GoUpload } from "react-icons/go";
 import ProductSlider from '../ProductSlider';
 import { useTheme } from '@/app/context/ThemeContext';
@@ -27,13 +26,14 @@ import clientaxios from '../axiosinstance';
 import ReviewForm from './ReviewForm';
 import { toast } from 'react-toastify/unstyled';
 import BlackScreen from '../BlackScreen';
+import { useRouter } from 'next/navigation';
 
 
 
 function SingleProduct() {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const {darkmode,loading , setloading} = useTheme();
+    const {darkmode,loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice} = useTheme();
     const [counter , setcounter] = useState(5);
     const [specspage , setspecspage] = useState(true);
     const [listdata , setlistdata] = useState({});
@@ -53,6 +53,7 @@ function SingleProduct() {
     const [prevuserimage , setprevuserimage] = useState();
     const [colorcategory , setcolorcategory] = useState([]);
 
+const router = useRouter();
     //  const GetSingleQtyData = async () => {
            
     //           try {
@@ -270,7 +271,6 @@ const GetData = async () => {
 
     
 
-console.log('listdata' , listdata.id)
 
 const handleColorCategory = (id) => {
 
@@ -281,12 +281,90 @@ const handleColorCategory = (id) => {
 }
 
 
+   const GetCartPrice = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductNewPrice)
+      
+              setcartserverprice(Number(getqty));
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
+
+           const GetCartQty = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductQty)
+      
+              setcartserverqty(Number(getqty));
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
+
 
 useEffect(() => {
 
-    GetData();
+   
+                        if(!localStorage.getItem('userid')) {
+
+                        router.push('/login')
+                      } else {
+ GetData();
     GetList();
     GetColors();
+     GetCartQty();
+                      GetCartPrice();
+
+
+                      }
     // GetSingleQtyData();
 
 
@@ -373,16 +451,16 @@ rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
     </Button>
 </div>
 
-{/* <div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
+<div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
     
     <Button>
         <span className='text-black text-3xl'>-</span>
     </Button>
-    <span className='text-center w-20 outline-0 font-bold'>{contextsingleitemqty}</span>
+    <span className='text-center w-20 outline-0 font-bold'>1</span>
     <Button>
         <span className='text-black text-2xl'>+</span>
     </Button>
-</div> */}
+</div>
 
 <div className='flex gap-2 justify-between'>
     <div className='w-full h-20 bg-white flex flex-col items-center justify-center border border-[rgba(0,0,0,0.2)] rounded'>

@@ -7,8 +7,6 @@ import { Button } from '@mui/material';
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import Image from 'next/image';
 import { useTheme } from '@/app/context/ThemeContext';
-import Link from 'next/link';
-import head1 from '../../nextjs/hero/1.png'
 import clientaxios from './axiosinstance';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify/unstyled';
@@ -375,6 +373,8 @@ const handlePriceChange = (e) => {
               GetData();
               GetCartQty();
                       GetCartPrice();
+
+                    
 
 
             return () => setcategoryid(0)

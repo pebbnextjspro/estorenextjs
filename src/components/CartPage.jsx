@@ -12,7 +12,9 @@ import { useRouter } from 'next/navigation';
 
 function CartPage() {
 
-    const {darkmode , loading , setloading,cartserverprice,cartserverqty , setcartserverqty,setcartserverprice} = useTheme();
+    const {darkmode , loading , setloading,cartserverprice,cartserverqty , setcartserverqty,setcartserverprice,
+      cartshipcharges , setcartshipcharges,grandtotal , setgrandtotal
+    } = useTheme();
     const [counter , setcounter] = useState(5);
     const [cartitems , setcartitems] = useState([]);
     const router = useRouter();
@@ -37,6 +39,45 @@ function CartPage() {
         setloading(false)
       }
     }
+
+       const GetCartShipCharges = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductShipCharges)
+      
+              setcartshipcharges(Number(getqty));
+
+                const grandtotalfrom = (res.data.Data[0].GrandTotal)
+      
+              setgrandtotal(Number(grandtotalfrom));
+
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
 
      const GetCartQty = async () => {
       
@@ -106,6 +147,102 @@ function CartPage() {
                }
             }
 
+            const handleAddClick = async (ProductId , ProductName,ProductImages2,ProductColor, ProductNewPrice
+              ,ProductOldPrice,
+    ProductQty, UserId,InvoiceNumber,ProductImages1,ProductShipCharges) => {
+
+      setloading(true)
+              
+   try {
+            
+                 const res = await clientaxios.post(`/api/admin/cart/cart-create` , {ProductId , ProductName,ProductImages2,ProductColor,
+                   ProductNewPrice,ProductOldPrice,
+    ProductQty, UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
+      
+            
+                if (res.data.success) {
+      
+                  // const sorteddata = [...res.data.Data].sort((a , b) => {
+      
+                  //   return a.CategoryName.localeCompare(b.CategoryName)
+                  // })
+      
+                toast.success(`${res.data.msg}`);
+            
+                }
+            
+                
+               } catch (error) {
+            
+                if(error.response) {
+            
+                    toast.error(`${error.response.data.msg}`)
+                } else {
+            
+                    toast.error('Server is not responding')
+                }
+                
+               } finally {
+
+                 GetItems();
+GetCartQty();
+GetCartPrice();
+GetCartShipCharges();
+setloading(false)
+               }
+             
+            }
+
+               const handleRemoveClick = async (ProductId , ProductName,ProductImages2,ProductColor, ProductNewPrice,ProductOldPrice,
+    ProductQty, UserId,InvoiceNumber,ProductImages1,ProductShipCharges,TotalQty) => {
+
+      setloading(true)
+              
+   try {
+
+    if (TotalQty < 2) {
+
+      return
+    }
+            
+                 const res = await clientaxios.post(`/api/admin/cart/cart-create` , {ProductId , ProductName,ProductImages2,ProductColor,
+                   ProductNewPrice,ProductOldPrice,
+    ProductQty, UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
+      
+            
+                if (res.data.success) {
+      
+                  // const sorteddata = [...res.data.Data].sort((a , b) => {
+      
+                  //   return a.CategoryName.localeCompare(b.CategoryName)
+                  // })
+      
+                toast.success(`Item Removed From Cart Succesfuly`);
+            
+                }
+            
+                
+               } catch (error) {
+            
+                if(error.response) {
+            
+                    toast.error(`${error.response.data.msg}`)
+                } else {
+            
+                    toast.error('Server is not responding')
+                }
+                
+               } finally {
+
+                 GetItems();
+GetCartQty();
+GetCartPrice();
+GetCartShipCharges();
+setloading(false)
+               }
+             
+            }
+
         useEffect(() => {
 if(!localStorage.getItem('userid')) {
 
@@ -115,20 +252,14 @@ if(!localStorage.getItem('userid')) {
   GetItems();
 GetCartQty();
 GetCartPrice();
+GetCartShipCharges();
 }
 
 
         },[])
 
-        console.log('cartitems' , cartitems)
+     console.log('cartshipcharges' , cartshipcharges)
 
-
-     const handleOnChange = (e) => {
-
-        const value = e.target.value;
-
-        setcounter(value)
-    }
 
   return (
    <>
@@ -180,13 +311,18 @@ GetCartPrice();
  </div>
  <div className='border border-[rgba(0,0,0,0.2)] rounded w-52 h-[50px] flex items-center justify-between bg-white'>
     
-    <Button>
+    <Button onClick={() => handleRemoveClick(data.ProductId , data.ProductName, data.ProductImages2, data.ProductColor, -data.ProductNewPrice,
+    data.ProductOldPrice, -1, localStorage.getItem('userid'), data.InvoiceNumber, data.ProductImages1,
+    -data.ProductShipCharges,data.TotalQty)}>
         <span className='text-black text-3xl'>-</span>
     </Button>
     {/* <input className='text-center w-20 outline-0 font-bold text-black'
      type="text" value={counter} onChange={handleOnChange} readOnly /> */}
      <span>{data.TotalQty}</span>
-    <Button>
+    <Button onClick={() => handleAddClick(data.ProductId , data.ProductName, data.ProductImages2, data.ProductColor, 
+    data.ProductNewPrice,
+    data.ProductOldPrice, 1, localStorage.getItem('userid'), data.InvoiceNumber, data.ProductImages1,
+    data.ProductShipCharges)}>
         <span className='text-black text-2xl'>+</span>
     </Button>
 </div>
@@ -213,20 +349,20 @@ GetCartPrice();
 sticky top-10 self-start p-7'>
    <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Total</span>
-  <span className='text-[19px] font-semibold'>Rs.{Number(cartserverprice)}</span>
+  <span className='text-[19px] font-semibold'>Rs.{Number(cartserverprice).toLocaleString('en-pk')}</span>
 </div>
 
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Shipping Charges</span>
-  <span className='text-[18px] font-semibold'>Rs.5,9878</span>
+  <span className='text-[18px] font-semibold'>Rs.{Number(cartshipcharges).toLocaleString('en-pk')}</span>
 </div>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Discount</span>
-  <span className='text-[17px] font-light'>10%</span>
+  <span className='text-[17px] font-light'>-</span>
 </div>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Grand Total</span>
-  <span className='text-[23px] font-bold'>Rs.5,9878</span>
+  <span className='text-[23px] font-bold'>Rs.{Number(grandtotal).toLocaleString('en-pk')}</span>
 </div>
 
 <Link href={'/checkout'} className='linkclass'>

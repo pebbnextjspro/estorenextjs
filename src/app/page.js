@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
 
-  const { headeractive , setheaderactive} = useTheme()
+  const { headeractive , setheaderactive } = useTheme()
   const router = useRouter();
 
   useEffect(() => {

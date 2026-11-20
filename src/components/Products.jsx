@@ -18,7 +18,8 @@ function Products() {
 
     const {darkmode , setdarkmode ,catload , setcatload, categoryid,categorylist,setcategoryid,
       productmaxprice , setproductmaxprice,setproductcolor,productcolor,setactivecontext,setcartcounter,cartcounter,
-      loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice
+      loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
+      cartshipcharges , setcartshipcharges
     } = useTheme();
 
         const [listdata , setlistdata] = useState([]);
@@ -26,6 +27,40 @@ function Products() {
         const [maxprice , setmaxprice] = useState(0);
       
         const router = useRouter();
+
+          const GetCartShipCharges = async () => {
+      
+         try {
+      
+           const res = await clientaxios.get(`/api/admin/cart/cart-qty/${localStorage.getItem('userid')}`);
+
+      
+          if (res.data.success) {
+
+            // const sorteddata = [...res.data.Data].sort((a , b) => {
+
+            //   return a.CategoryName.localeCompare(b.CategoryName)
+            // })
+
+            const getqty = (res.data.Data[0].ProductShipCharges)
+      
+              setcartshipcharges(Number(getqty));
+      
+          }
+      
+          
+         } catch (error) {
+      
+          if(error.response) {
+      
+              alert(error.response.data.msg)
+          } else {
+      
+              alert('Server is not responding')
+          }
+          
+         }
+      }
 
            const GetCartPrice = async () => {
       
@@ -307,7 +342,7 @@ const handlePriceChange = (e) => {
     }
 
     const handleCartButton = async (ProductId,ProductName,ProductImages2,ProductColor,
-      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1) => {
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges) => {
 
         setloading(true)
 
@@ -320,7 +355,7 @@ const handlePriceChange = (e) => {
         }
 
         const res = await clientaxios.post('/api/admin/cart/cart-create' , {ProductId,ProductName,ProductImages2,ProductColor,
-      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1});
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
 
       if (res.data.success) {
 
@@ -345,6 +380,7 @@ const handlePriceChange = (e) => {
         setloading(false);
         GetCartQty();
         GetCartPrice();
+        GetCartShipCharges();
       }
 
       
@@ -373,6 +409,7 @@ const handlePriceChange = (e) => {
               GetData();
               GetCartQty();
                       GetCartPrice();
+                      GetCartShipCharges();
 
                     
 
@@ -523,7 +560,8 @@ const handlePriceChange = (e) => {
    }
     <div className='flex gap-2 items-center'>
     <Button onClick={() => handleCartButton(data.id,data.ProductName,data.ProductImages2,data.ProductColor,
-      data.ProductNewPrice,data.ProductOldPrice,1,localStorage.getItem('userid'),1,data.ProductImages1)}>
+      data.ProductNewPrice,data.ProductOldPrice,1,localStorage.getItem('userid'),1,data.ProductImages1,
+      data.ProductShipCharges)}>
           <RiShoppingCart2Fill/></Button>
    
     <span className='stock'>IN STOCK</span>

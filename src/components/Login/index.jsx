@@ -8,14 +8,16 @@ import { useTheme } from '@/app/context/ThemeContext';
 import BlackScreen from '../BlackScreen';
 import clientaxios from '../axiosinstance';
 import { useRouter } from 'next/navigation';
+import GuestUserAlert from '../GuestUserAlert';
 
 export default function Login() {
     const {loading , setloading, headeractive , setheaderactive} = useTheme();
+   
     const router = useRouter();
 
   const [formData, setFormData] = useState({
-    identifier: '',
-    password: '',
+    identifier: 'guestuser@website.com',
+    password: '123',
   });
 
   const handleChange = (e) => {
@@ -29,6 +31,12 @@ export default function Login() {
     setloading(true)
          
             try {
+
+              if (formData.identifier === 'guestuser@website.com') {
+
+                alert('Guest User only View Items. For Shopping Please Sign In')
+
+              }
          
               const res = await clientaxios.post(`/api/admin/users/check-loginnext` , formData);
    
@@ -79,6 +87,8 @@ setheaderactive(false)
 {
     loading && <BlackScreen/>
 }
+
+
 <div className='w-100 h-10 bg-white'>
 
 </div>

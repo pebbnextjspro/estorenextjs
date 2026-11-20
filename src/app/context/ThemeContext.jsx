@@ -23,6 +23,8 @@ export function ThemeProvider({ children }) {
      const [userid , setuserid] = useState(0);
      const [popupuseractive , setpopupuseractive] = useState(false)
      const [headeractive , setheaderactive] = useState(true)
+     const [cartshipcharges , setcartshipcharges] = useState()
+     const [grandtotal , setgrandtotal] = useState();
 
      
 
@@ -65,14 +67,15 @@ export function ThemeProvider({ children }) {
             
             },[])
 
-console.log(popupuseractive)
+            
+
   return (
     <ThemeContext.Provider value={{ darkmode, setdarkmode,dropdownactive , setdropdownactive,loading , setloading,
       search , setsearch,catload , setcatload,categoryid ,setcategoryid,categorylist , setcategorylist,
       productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext,
       cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
       contextsingleitemqty , setcontextsingleitemqty,userid , setuserid,popupuseractive , setpopupuseractive,
-      headeractive , setheaderactive
+      headeractive , setheaderactive,cartshipcharges , setcartshipcharges,grandtotal , setgrandtotal
       }}>
       {children}
     </ThemeContext.Provider>

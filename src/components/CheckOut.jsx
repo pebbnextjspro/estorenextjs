@@ -73,19 +73,19 @@ function CheckOut() {
 sticky top-10 self-start'>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Total</span>
-  <span className='text-[19px] font-semibold'>Rs.5,9878</span>
+  <span className='text-[19px] font-semibold'>Rs.{Number(localStorage.getItem('totalamount')).toLocaleString('en-pk')}</span>
 </div>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Shipping Charges</span>
-  <span className='text-[18px] font-semibold'>Rs.5,9878</span>
+  <span className='text-[18px] font-semibold'>Rs.{Number(localStorage.getItem('shipcharges')).toLocaleString('en-pk')}</span>
 </div>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Discount</span>
-  <span className='text-[17px] font-light'>10%</span>
+  <span className='text-[17px] font-light'>-</span>
 </div>
 <div className='flex items-center justify-between'>
   <span className='text-[20px] font-semibold'>Grand Total</span>
-  <span className='text-[23px] font-bold'>Rs.5,9878</span>
+  <span className='text-[23px] font-bold'>Rs.{Number(localStorage.getItem('grandtotal')).toLocaleString('en-pk')}</span>
 </div>
 </div>
        </div>

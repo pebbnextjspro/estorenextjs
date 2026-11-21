@@ -61,6 +61,8 @@ function CartPage() {
                 const grandtotalfrom = (res.data.Data[0].GrandTotal)
       
               setgrandtotal(Number(grandtotalfrom));
+              localStorage.setItem('grandtotal' , grandtotalfrom)
+              localStorage.setItem('shipcharges' , getqty)
 
       
           }
@@ -130,6 +132,7 @@ function CartPage() {
                   const getqty = (res.data.Data[0].ProductNewPrice)
             
                     setcartserverprice(Number(getqty));
+                    localStorage.setItem('totalamount' , getqty);
             
                 }
             
@@ -243,6 +246,47 @@ setloading(false)
              
             }
 
+             const handleDeleteItem = async (productid , userid) => {
+
+              setloading(true)
+            
+               try {
+            
+    const res = await clientaxios.post(`/api/admin/cart/cart-deletenext/${productid}/${localStorage.getItem('userid')}`);
+      
+            
+                if (res.data.success) {
+      
+                  // const sorteddata = [...res.data.Data].sort((a , b) => {
+      
+                  //   return a.CategoryName.localeCompare(b.CategoryName)
+                  // })
+                      toast.success(`${res.data.msg}`);
+
+                 
+                }
+            
+                
+               } catch (error) {
+            
+                if(error.response) {
+            
+                 toast.error(`${error.response.data.msg}`)
+                } else {
+            
+                toast.error('Server is not responding')
+                }
+                
+               } finally {
+                  GetItems();
+GetCartQty();
+GetCartPrice();
+GetCartShipCharges();
+setloading(false)
+               }
+            }
+
+
         useEffect(() => {
 if(!localStorage.getItem('userid')) {
 
@@ -306,6 +350,15 @@ GetCartShipCharges();
        <div className='flex items-center gap-2'>
           <span className='text-[22px] text-red-600'>Rs. {Number(data.ProductNewPrice).toLocaleString('en-pk')}</span>
           <span className='text-black line-through'>Rs.{Number(data.ProductOldPrice).toLocaleString('en-pk')}</span>
+           <div onClick={() => {
+            if (window.confirm('Are You Sure!')) {
+              handleDeleteItem(data.ProductId,data.UserId)
+            }
+           }}
+            className='w-8 h-8 flex items-center justify-center border p-2
+           rounded bg-red-700 text-white font-bold cursor-pointer'>
+            X
+           </div>
         </div>
   </div>
  </div>

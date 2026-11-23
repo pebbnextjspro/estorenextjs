@@ -40,6 +40,7 @@ function CartPage() {
       }
     }
 
+
        const GetCartShipCharges = async () => {
       
          try {

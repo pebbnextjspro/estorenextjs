@@ -2,13 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Banner from "@/components/Banner";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BootstrapClient from "@/components/BootstrapClient";
-import BlackPage from "@/components/BlackPage";
 import ToastProvider from "@/components/ToastProvider";
 import "react-toastify/ReactToastify.css";
-import BlackScreen from "@/components/BlackScreen";
 import WhatsappButton from "@/components/WhatsappButton";
 import { ThemeProvider } from "./context/ThemeContext";
 
@@ -42,11 +38,9 @@ export default function RootLayout({ children }) {
         
             <Header/>
           
-        
         {children}
         <WhatsappButton/>
         <Footer/>
-       
          <ToastProvider/>
        
        </ThemeProvider>

@@ -313,12 +313,7 @@ setloading(false)
 if(!localStorage.getItem('userid')) {
 
   router.push('/login')
-} else if (cartserverqty===0) {
-
-  toast.error('Please Add Any Item into Cart');
-  router.push('/')
-
-} else {
+}  else  {
 
   GetItems();
 GetCartQty();
@@ -446,12 +441,20 @@ sticky top-10 self-start p-7'>
 </div>
 
 
-<Link href={'/checkout'} className='linkclass'>
-<Button
+{
+  cartitems?.length !== 0 ? <Link href={'/checkout'} className='linkclass'>
+<Button 
+ className='!bg-black !text-white !font-bold'>
+  <span>Check Out</span>
+</Button>
+</Link> :
+<Link href={'/'} className='linkclass'>
+<Button 
  className='!bg-black !text-white !font-bold'>
   <span>Check Out</span>
 </Button>
 </Link>
+}
 
 
  </div>

@@ -50,7 +50,7 @@ export default function Header() {
 
   const {darkmode , setdarkmode , dropdownactive , setdropdownactive,search , setsearch,cartcounter,
     cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,popupuseractive , setpopupuseractive,
-    headeractive , setheaderactive
+    headeractive , setheaderactive,wishlistqty
   } = useTheme();
   const [sidebaractive , setsidebaractive] = useState(false);
       const [open, setOpen] = useState(false);
@@ -269,9 +269,9 @@ popupuseractive && <PopUpUSer/>
       <Link href={'/wishlist'} className='flex justify-center items-center relative wishiconcontainer'>
     {darkmode ? <CiHeart style={{color: "#fff"}} size={35} onClick={() => alert('ckucj')}/> :
      <CiHeart style={{color: "#000"}}
-     size={35} onClick={() => alert('ckucj')}/>}
+     size={35}/>}
    <span className='w-6 h-6 bg-red-500 rounded-full flex justify-center items-center text-white font-bold
-   absolute -top-2 -right-2'>10</span>
+   absolute -top-2 -right-2'>{wishlistqty}</span>
       </Link>
 {/* //////////////////////////////////////////////////////////// Mobile Search //////////////////////////////////////// */}
 
@@ -291,11 +291,11 @@ popupuseractive && <PopUpUSer/>
           <span className='font-semibold text-[#6f5109]'>Total Price</span>
           <span className='font-semibold text-green-800'>{Number(cartserverprice).toLocaleString("en-pk")}</span>
         </div>
-       <div onClick={() => setpopupuseractive(!popupuseractive)}
+       {/* <div onClick={() => setpopupuseractive(!popupuseractive)}
        className='flex justify-center items-center relative cursor-pointer logincontainer'>
       {darkmode ? <CiUser style={{color: "#fff"}} size={35}/> : <CiUser style={{color: "#000"}} size={35}
       />}
-      </div>
+      </div> */}
       
     </div>
 

@@ -25,8 +25,41 @@ export function ThemeProvider({ children }) {
      const [headeractive , setheaderactive] = useState(true)
      const [cartshipcharges , setcartshipcharges] = useState()
      const [grandtotal , setgrandtotal] = useState();
+     const [wishlistqty , setwishlistqty] = useState();
 
+      const GetWishListQty = async () => {
+           
+              try {
+           
+                const res = await clientaxios.get(`/api/admin/wishlist/wishlist-qty/${localStorage.getItem('userid')}`);
      
+           
+               if (res.data.success) {
+     
+                 // const sorteddata = [...res.data.Data].sort((a , b) => {
+     
+                 //   return a.CategoryName.localeCompare(b.CategoryName)
+                 // })
+     
+                 const getqty = (res.data.Data[0].ProductQty)
+           
+                   setwishlistqty(Number(getqty));
+           
+               }
+           
+               
+              } catch (error) {
+           
+               if(error.response) {
+           
+                   alert(error.response.data.msg)
+               } else {
+           
+                   alert('Server is not responding')
+               }
+               
+              }
+           }
 
 
       const GeCategoryData = async () => {
@@ -64,9 +97,12 @@ export function ThemeProvider({ children }) {
         useEffect(() => {
             
                 GeCategoryData();
+                GetWishListQty();
             
             },[])
 
+
+           
             
 
   return (
@@ -75,7 +111,8 @@ export function ThemeProvider({ children }) {
       productcolor , setproductcolor,productmaxprice , setproductmaxprice,activecontext , setactivecontext,
       cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
       contextsingleitemqty , setcontextsingleitemqty,userid , setuserid,popupuseractive , setpopupuseractive,
-      headeractive , setheaderactive,cartshipcharges , setcartshipcharges,grandtotal , setgrandtotal
+      headeractive , setheaderactive,cartshipcharges , setcartshipcharges,grandtotal , setgrandtotal,
+      wishlistqty , setwishlistqty,GetWishListQty
       }}>
       {children}
     </ThemeContext.Provider>

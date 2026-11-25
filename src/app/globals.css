@@ -1024,7 +1024,7 @@ background-color: #fff;
 
   .myheader {
     width: 100%;
-    position: relative;
+    position: fixed;
 }
 
   .slidercontainer h2{

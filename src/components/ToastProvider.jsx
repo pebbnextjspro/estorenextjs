@@ -4,13 +4,14 @@ import { ToastContainer } from 'react-toastify/unstyled'
 function ToastProvider() {
   return (
       <ToastContainer
-      position="top-left"
+      position="bottom-center"
             autoClose={3000}
             hideProgressBar={false}
             newestOnTop
             closeOnClick
             pauseOnHover
             theme="light"
+            
       />
    
   )

@@ -33,7 +33,8 @@ import { useRouter } from 'next/navigation';
 function SingleProduct() {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const {darkmode,loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice} = useTheme();
+    const {darkmode,loading , setloading,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
+        GetWishListQty} = useTheme();
     const [counter , setcounter] = useState(5);
     const [specspage , setspecspage] = useState(true);
     const [listdata , setlistdata] = useState({});
@@ -54,6 +55,152 @@ function SingleProduct() {
     const [colorcategory , setcolorcategory] = useState([]);
 
 const router = useRouter();
+
+ const handleCartButton = async (ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges) => {
+
+        setloading(true)
+
+      try {
+
+        if (!localStorage.getItem('userid')) {
+
+          toast.error('Please Sign IN');
+          return
+        }
+
+        const res = await clientaxios.post('/api/admin/cart/cart-create' , {ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
+
+      if (res.data.success) {
+
+        toast.success(res.data.msg)
+      } else {
+
+        toast.error(res.data.msg)
+      }
+        
+      } catch (error) {
+
+        if (error.response) {
+
+          toast.error(error.response.data.msg)
+        } else {
+
+          toast.error('Server is not responding')
+        }
+        
+      } finally {
+
+        setloading(false);
+
+        GetData();
+    GetList();
+    GetColors();
+     GetCartQty();
+                      GetCartPrice();
+
+    
+      }
+
+      
+
+    }
+
+     const handleWishButton = async (ProductId, ProductName, ProductImages2, ProductColor,
+    ProductNewPrice, ProductOldPrice, ProductQty, UserId, InvoiceNumber, ProductImages1, ProductShipCharges) => {
+
+    setloading(true)
+
+    try {
+
+      if (!localStorage.getItem('userid')) {
+
+        toast.error('Please Sign IN');
+        return
+      }
+
+      const res = await clientaxios.post('/api/admin/wishlist/wishlist-createnext', {
+        ProductId, ProductName, ProductImages2, ProductColor,
+        ProductNewPrice, ProductOldPrice, ProductQty, UserId, InvoiceNumber, ProductImages1, ProductShipCharges
+      });
+
+      if (res.data.success) {
+
+        toast.success(res.data.msg)
+      } else {
+
+        toast.error(res.data.msg)
+      }
+
+    } catch (error) {
+
+      if (error.response) {
+
+        toast.error(error.response.data.msg)
+      } else {
+
+        toast.error('Server is not responding')
+      }
+
+    } finally {
+
+      setloading(false);
+      GetCartQty();
+      GetCartPrice();
+      GetWishListQty();
+    }
+
+
+
+  }
+
+    const handleBuyNow = async (ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges) => {
+
+        setloading(true)
+
+      try {
+
+        if (!localStorage.getItem('userid')) {
+
+          toast.error('Please Sign IN');
+          return
+        }
+
+        const res = await clientaxios.post('/api/admin/cart/cart-create' , {ProductId,ProductName,ProductImages2,ProductColor,
+      ProductNewPrice,ProductOldPrice,ProductQty,UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
+
+      if (res.data.success) {
+
+        toast.success(res.data.msg)
+      } else {
+
+        toast.error(res.data.msg)
+      }
+        
+      } catch (error) {
+
+        if (error.response) {
+
+          toast.error(error.response.data.msg)
+        } else {
+
+          toast.error('Server is not responding')
+        }
+        
+      } finally {
+
+        setloading(false);
+
+      router.push('/cart')
+
+    
+      }
+
+      
+
+    }
     //  const GetSingleQtyData = async () => {
            
     //           try {
@@ -355,7 +502,7 @@ useEffect(() => {
    
                         if(!localStorage.getItem('userid')) {
 
-                        router.push('/login')
+                        router.push('/')
                       } else {
  GetData();
     GetList();
@@ -437,30 +584,47 @@ className='newprice !text-2xl !font-extrabold !text-amber-500'>Rs.{Number(listda
 rounded bg-white flex items-center justify-center p-2 cursor-pointer'>
 <Image src={`${process.env.NEXT_PUBLIC_IMAGE_LINK}${data.ProductImages1}`} alt='Color' width={100} height={100} />
 </div>
+
+
     ))
 }
 
 </div>
 
 <div className='flex gap-2'>
-    <Button className='!bg-[#02B290] !w-1/2'>
+    <Button onClick={() => handleCartButton(listdata.id,listdata.ProductName,listdata.ProductImages2,listdata.ProductColor,
+      listdata.ProductNewPrice,listdata.ProductOldPrice,1,localStorage.getItem('userid'),1,listdata.ProductImages1,
+      listdata.ProductShipCharges)}
+    className='!bg-[#02B290] !w-1/2'>
         <span className='text-white font-bold'>ADD TO CART</span>
     </Button>
-     <Button className='!bg-[#ffff] !w-1/2 !border !border-[rgba(0,0,0,0.2)]'>
+     <Button onClick={() => handleBuyNow(listdata.id,listdata.ProductName,listdata.ProductImages2,listdata.ProductColor,
+      listdata.ProductNewPrice,listdata.ProductOldPrice,1,localStorage.getItem('userid'),1,listdata.ProductImages1,
+      listdata.ProductShipCharges)}
+     className='!bg-[#ffff] !w-1/2 !border !border-[rgba(0,0,0,0.2)]'>
         <span className='text-black font-bold'>BUY NOW</span>
     </Button>
 </div>
 
-<div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
+<div className='flex gap-2'>
+    <Button onClick={() => handleWishButton(listdata.id, listdata.ProductName, listdata.ProductImages2, listdata.ProductColor,
+                  listdata.ProductNewPrice, listdata.ProductOldPrice, 1, localStorage.getItem('userid'), 1, listdata.ProductImages1,
+                  listdata.ProductShipCharges)}
+    className='bg-[#02B290]! w-full!'>
+        <span className='text-white font-bold'>ADD TO Wishlit</span>
+    </Button>
+</div>
+
+{/* <div className='border border-[rgba(0,0,0,0.2)] rounded w-64 flex items-center justify-between bg-white'>
     
-    <Button>
+    <Button disabled>
         <span className='text-black text-3xl'>-</span>
     </Button>
     <span className='text-center w-20 outline-0 font-bold'>1</span>
     <Button>
         <span className='text-black text-2xl'>+</span>
     </Button>
-</div>
+</div> */}
 
 <div className='flex gap-2 justify-between'>
     <div className='w-full h-20 bg-white flex flex-col items-center justify-center border border-[rgba(0,0,0,0.2)] rounded'>

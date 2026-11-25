@@ -18,6 +18,7 @@ function CartPage() {
     const [counter , setcounter] = useState(5);
     const [cartitems , setcartitems] = useState([]);
     const router = useRouter();
+
     
 
     const GetItems = async () => {
@@ -38,6 +39,25 @@ function CartPage() {
       } finally {
         setloading(false)
       }
+    }
+
+    
+
+    const handleSubmit = () => {
+
+      setloading(true)
+
+      Promise.all(cartitems.map((data) => {
+
+      clientaxios.post('/api/admin/invoice/invoice-create' , data)     
+      
+      }     
+    
+    ))
+
+    alert('all data uploaded')
+    setloading(false);
+    router.push('/checkout')
     }
 
 
@@ -209,7 +229,7 @@ setloading(false)
       return
     }
             
-                 const res = await clientaxios.post(`/api/admin/cart/cart-create` , {ProductId , ProductName,ProductImages2,ProductColor,
+                 const res = await clientaxios.post(`/api/admin/cart/cart-createminusnext` , {ProductId , ProductName,ProductImages2,ProductColor,
                    ProductNewPrice,ProductOldPrice,
     ProductQty, UserId,InvoiceNumber,ProductImages1,ProductShipCharges});
       
@@ -247,13 +267,14 @@ setloading(false)
              
             }
 
-             const handleDeleteItem = async (productid , userid) => {
+             const handleDeleteItem = async (productid , userid, TotalQty) => {
 
               setloading(true)
             
                try {
             
-    const res = await clientaxios.post(`/api/admin/cart/cart-deletenext/${productid}/${localStorage.getItem('userid')}`);
+    const res = 
+    await clientaxios.post(`/api/admin/cart/cart-deletenext/${productid}/${localStorage.getItem('userid')}` ,{TotalQty});
       
             
                 if (res.data.success) {
@@ -292,6 +313,11 @@ setloading(false)
 if(!localStorage.getItem('userid')) {
 
   router.push('/login')
+} else if (cartserverqty===0) {
+
+  toast.error('Please Add Any Item into Cart');
+  router.push('/')
+
 } else {
 
   GetItems();
@@ -353,7 +379,7 @@ GetCartShipCharges();
           <span className='text-black line-through'>Rs.{Number(data.ProductOldPrice).toLocaleString('en-pk')}</span>
            <div onClick={() => {
             if (window.confirm('Are You Sure!')) {
-              handleDeleteItem(data.ProductId,data.UserId)
+              handleDeleteItem(data.ProductId,data.UserId,data.TotalQty)
             }
            }}
             className='w-8 h-8 flex items-center justify-center border p-2
@@ -419,11 +445,14 @@ sticky top-10 self-start p-7'>
   <span className='text-[23px] font-bold'>Rs.{Number(grandtotal).toLocaleString('en-pk')}</span>
 </div>
 
+
 <Link href={'/checkout'} className='linkclass'>
-<Button className='!bg-black !text-white !font-bold'>
+<Button
+ className='!bg-black !text-white !font-bold'>
   <span>Check Out</span>
 </Button>
 </Link>
+
 
  </div>
 

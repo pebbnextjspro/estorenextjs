@@ -26,6 +26,39 @@ export function ThemeProvider({ children }) {
      const [cartshipcharges , setcartshipcharges] = useState()
      const [grandtotal , setgrandtotal] = useState();
      const [wishlistqty , setwishlistqty] = useState();
+     const [invoicetotal , setinvoicetotal] = useState([]);
+
+       const GetInvoiceTotal = async () => {
+           
+              try {
+           
+                const res = await clientaxios.get(`/api/admin/invoice/invoice-total/${localStorage.getItem('userid')}`);
+     
+           
+               if (res.data.success) {
+     
+                 // const sorteddata = [...res.data.Data].sort((a , b) => {
+     
+                 //   return a.CategoryName.localeCompare(b.CategoryName)
+                 // })
+     
+               setinvoicetotal(res.data.Data)
+               }
+           
+               
+              } catch (error) {
+           
+               if(error.response) {
+           
+                   alert(error.response.data.msg)
+               } else {
+           
+                   alert('Server is not responding')
+               }
+               
+              }
+           }
+
 
       const GetWishListQty = async () => {
            
@@ -98,6 +131,7 @@ export function ThemeProvider({ children }) {
             
                 GeCategoryData();
                 GetWishListQty();
+                GetInvoiceTotal();
             
             },[])
 
@@ -112,7 +146,7 @@ export function ThemeProvider({ children }) {
       cartcounter , setcartcounter,cartserverqty , setcartserverqty,cartserverprice , setcartserverprice,
       contextsingleitemqty , setcontextsingleitemqty,userid , setuserid,popupuseractive , setpopupuseractive,
       headeractive , setheaderactive,cartshipcharges , setcartshipcharges,grandtotal , setgrandtotal,
-      wishlistqty , setwishlistqty,GetWishListQty
+      wishlistqty , setwishlistqty,GetWishListQty,invoicetotal , setinvoicetotal,GetInvoiceTotal
       }}>
       {children}
     </ThemeContext.Provider>

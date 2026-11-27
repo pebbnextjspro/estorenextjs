@@ -9,13 +9,21 @@ import React, { useEffect, useState } from 'react'
 import BlackScreen from './BlackScreen';
 import { toast } from 'react-toastify/unstyled';
 import clientaxios from './axiosinstance';
+import axios from 'axios';
+import { useRef } from 'react';
 
 function CheckOut() {
 
-    const {darkmode, loading , setloading} = useTheme();
+    const {darkmode, loading , setloading , invoicetotal , setinvoicetotal,GetInvoiceTotal} = useTheme();
     const [counter , setcounter] = useState(5);
     const [cartitems , setcartitems] = useState([]);
     const router = useRouter();
+    const [products , setproducts] = useState({})
+    const [useraddress , setuseraddress] = useState();
+    // const finalpro = products.join(':')
+console.log('products', products) 
+
+
 
 
     const [formfields , setformfields] = useState({
@@ -29,9 +37,13 @@ function CheckOut() {
     UserCity: '',
     UserPostalCode: '',
     UserPhone: ''
-    })
+    });
 
-    const handleOnChange = (e) => {
+   
+    
+
+
+const handleOnChange = (e) => {
 
       const value = e.target.value;
       const name = e.target.name;
@@ -40,8 +52,15 @@ function CheckOut() {
 
         ...formfields , [name] : value
       }))
-    }
+    
+     setuseraddress(formfields.UserAddress)
+    };
 
+    
+
+
+console.log('useraddress' , useraddress)
+ 
      const AddUser = async () => {
       setloading(true)
 
@@ -72,6 +91,8 @@ if (res.data.success) {
       setloading(true)
 
       try {
+
+    
 
 const res = await clientaxios.put(`/api/admin/users/user-addressupdate/${localStorage.getItem('userid')}` , formfields);
 
@@ -125,6 +146,8 @@ if (res.data.success) {
         const res = await clientaxios.get(`/api/admin/cart/table-list/${localStorage.getItem('userid')}`);
         if (res.data.success) {
           setcartitems(res.data.Data);
+       setproducts(res.data.Data);
+        
         }
       } catch (error) {
         if(error.response){
@@ -137,44 +160,62 @@ if (res.data.success) {
       }
     }
 
-   
+ const SendEmail = async (e) => {
+e.preventDefault();
 
-    const handleSubmit = async (e) => {
+      setloading(true)
 
-      e.preventDefault();
+      try {
 
-          setloading(true)
+           const formdata = new FormData();
 
-try {
+        formdata.append('UserAddress' , formfields.UserAddress);
+        formdata.append('UserCity', formfields.UserCity);
+         
+       
 
-   await Promise.all(cartitems.map((data) => {
+const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/send-email`, {cartitems,formfields,invoicetotal})
+
+if (res.data.success) {
+
+ Promise.all(cartitems.map((data) => {
 
       clientaxios.post(`/api/admin/invoice/invoice-create/${invoicenumber}` , data)     
       
       }     
     
-    ))
-  
-} catch (error) {
-
-  console.log(error)
-  
-} finally{
-
- toast.success('Thank You for Shopping!');
+    ));
+    toast.success('Thank You for Shopping!');
  AddUser();
  UpdateAddress();
     CartDelete();
-    setloading(false);
     router.push('/completeorder');
+} else {
+
+  console.log('email not send')
 }
-    
+        
+      } catch (error) {
+
+        
+
+       console.log("emailerror" , error) 
+       alert('Check Your Internet Connection',error)
+      } finally {
+
+              setloading(false);
+             // router.push('/completeorder');
+
+      }
     }
 
+   
    useEffect(() => {
     GetItems();
+    GetInvoiceTotal();
    },[])
 console.log('cartitems' , cartitems)
+console.log('invoicearray' , invoicetotal)
   return (
    <>
    {darkmode ? <div className='bg-[#171717] h-18'>
@@ -191,11 +232,16 @@ console.log('cartitems' , cartitems)
    <div className={darkmode ? 'container-fluid cartcontainer bg-[#171717]' : 'container-fluid cartcontainer bg-white'}>
      <div className='grid grid-cols-1 text-center'>
         <h2 className={darkmode ? 'text-white' : 'text-[#171717]'}>Your Cart</h2>
+         <Button onClick={SendEmail}>
+           <span> send email</span>
+          </Button>
            </div>
+
+        
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
       <div className='bg-[#F5F5F5] rounded p-4'>
-      <form onSubmit={handleSubmit}  className='flex flex-col gap-2' action="">
+      <form onSubmit={SendEmail}  className='flex flex-col gap-2' action="">
           <span className='text-2xl font-semibold'>Delivery</span>
          <select disabled
          className='w-full h-12 rounded border px-3 border-black' id="" required>
@@ -237,6 +283,9 @@ console.log('cartitems' , cartitems)
        <input type="email"  value={formfields.UserEmail} name='UserEmail' onChange={handleOnChange}
         className='w-full h-12 rounded border px-3 border-black focus:outline-[rgba(0,0,230,0.4)]'
        placeholder='Email Address' required />
+
+
+     
        
       {
         cartitems?.length !== 0 ?  <Button
@@ -249,7 +298,9 @@ console.log('cartitems' , cartitems)
       }
        
       </form>
-      
+         {/* <input type="text"  value={finalpro} name='AllProducts' onChange={(e) => setfinalpro(e.target.value)}
+        className='w-full h-12 rounded border px-3 border-black focus:outline-[rgba(0,0,230,0.4)]'
+       placeholder='Email Address' required /> */}
       </div>
 
        <div className=' w-full flex px-7'>
